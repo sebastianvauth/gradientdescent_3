@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Math Behind Gradient Descent</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            font-size: 150%;
+        }
+        section {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #ffffff;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
+        h1, h2, h3, h4 {
+            color: #333;
+            margin-top: 20px;
+        }
+        p, li {
+            line-height: 1.6;
+            color: #444;
+            margin-bottom: 20px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        .image-placeholder, .interactive-placeholder, .continue-button, .vocab-section, .why-it-matters, .test-your-knowledge, .faq-section, .stop-and-think {
+            text-align: left;
+        }
+        .image-placeholder img, .interactive-placeholder img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .vocab-section, .why-it-matters, .test-your-knowledge, .faq-section, .stop-and-think {
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .vocab-section {
+            background-color: #f0f8ff;
+        }
+        .vocab-section h3 {
+            color: #1e90ff;
+            font-size: 0.75em;
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+        .vocab-section h4 {
+            color: #000;
+            font-size: 0.9em;
+            margin-top: 10px;
+            margin-bottom: 8px;
+        }
+        .vocab-term {
+            font-weight: bold;
+            color: #1e90ff;
+        }
+        .why-it-matters {
+            background-color: #ffe6f0;
+        }
+        .why-it-matters h3 {
+            color: #d81b60;
+            font-size: 0.75em;
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+        .stop-and-think {
+            background-color: #e6e6ff;
+        }
+        .stop-and-think h3 {
+            color: #4b0082;
+            font-size: 0.75em;
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+        .continue-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 15px;
+            color: #ffffff;
+            background-color: #007bff;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .reveal-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 15px;
+            color: #ffffff;
+            background-color: #4b0082;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .test-your-knowledge {
+            background-color: #e6ffe6;
+        }
+        .test-your-knowledge h3 {
+            color: #28a745;
+            font-size: 0.75em;
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+        .test-your-knowledge h4 {
+            color: #000;
+            font-size: 0.9em;
+            margin-top: 10px;
+            margin-bottom: 8px;
+        }
+        .test-your-knowledge p {
+            margin-bottom: 15px;
+        }
+        .check-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 15px;
+            color: #ffffff;
+            background-color: #28a745;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            font-size: 1em;
+        }
+        .faq-section {
+            background-color: #fffbea;
+        }
+        .faq-section h3 {
+            color: #ffcc00;
+            font-size: 0.75em;
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+        .faq-section h4 {
+            color: #000;
+            font-size: 0.9em;
+            margin-top: 10px;
+            margin-bottom: 8px;
+        }
+    </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <section id="section1">
+        <div class="image-placeholder">
+            <img src="/placeholder.svg?height=300&width=600" alt="An illustration of a mathematical equation with the gradient descent update rule, superimposed on a graph of a cost function with an arrow showing the direction of descent.">
+        </div>
+        <h1>The Math Behind Gradient Descent</h1>
+        <p>We've explored the core idea of Gradient Descent using the intuitive analogy of a hiker descending a hill. Now, it's time to equip ourselves with the mathematical tools that power this amazing algorithm. Let's dive into the update rule and see how it translates our intuition into a concrete procedure!</p>
+        <div class="continue-button" onclick="showNextSection(2)">Continue</div>
+    </section>
+
+    <section id="section2">
+        
+        <p>At the heart of Gradient Descent lies the update rule, which tells us how to iteratively adjust our model's parameters to move towards the minimum of the cost function. The update rule is surprisingly simple, yet incredibly powerful:</p>
+        <p>\[ \beta = \beta - \alpha\nabla_\beta C(\beta) \]</p>
+        <p>Let's break down what each part of this equation means:</p>
+        <ul>
+            <li><strong>β:</strong> This represents the vector of our model's parameters. It's what we're trying to optimize. Think of it as the hiker's current location on the cost function landscape.</li>
+            <li><strong>α (alpha):</strong> This is the <strong>learning rate</strong>, a crucial hyperparameter that controls the step size we take in each iteration. It determines how far we move along the negative gradient. It is a hyperparameter, so we have to set it before the learning process.</li>
+            <li><strong>∇βC(β):</strong> This is the <strong>gradient</strong> of the cost function C with respect to the parameters β. It's a vector that points in the direction of the steepest ascent of the cost function at the current parameter values. The negative of the gradient, -∇βC(β), points in the direction of the steepest descent.</li>
+        </ul>
+        <p>In simpler terms, the update rule says: "To update our parameters, we take the current parameter values and subtract a portion (determined by the learning rate) of the gradient."</p>
+        <div class="image-placeholder">
+            <img src="/placeholder.svg?height=300&width=600" alt="A diagram showing a single step of gradient descent. It starts with a point labeled 'Current β' on a cost function curve. An arrow labeled '-∇βC(β)' points downhill from this point. Another arrow, scaled down by a factor of 'α', is labeled 'α∇βC(β)'. The endpoint of this smaller arrow is labeled 'New β'. The equation 'β = β - α∇βC(β)' is shown below the diagram.">
+        </div>
+        <div class="continue-button" onclick="showNextSection(3)">Continue</div>
+    </section>
+
+    <section id="section3">
+        
+        <p>Let's illustrate the update rule with a simple example. Suppose we have a cost function with only one parameter, β, and our cost function is:</p>
+        <p>\[ C(\beta) = \beta^2 \]</p>
+        <p>The gradient of this cost function is:</p>
+        <p>\[ \nabla_\beta C(\beta) = 2\beta \]</p>
+        <p>Now, let's say our initial guess for β is 3, and we choose a learning rate of α = 0.1. We can apply the update rule as follows:</p>
+        <ol>
+            <li>Calculate the gradient at β = 3:
+                <p>\[ \nabla_\beta C(3) = 2 * 3 = 6 \]</p>
+            </li>
+            <li>Apply the update rule:
+                <p>\[ \text{New } \beta = 3 - 0.1 * 6 = 2.4 \]</p>
+            </li>
+        </ol>
+        <p>We've moved from β = 3 to β = 2.4, getting closer to the minimum of C(β) at β = 0. We can repeat this process, iteratively updating β until we converge to the minimum.</p>
+        <div class="image-placeholder">
+            <img src="/placeholder.svg?height=300&width=600" alt="A graph of the cost function C(β) = β² (a parabola). A red point is shown at β = 3 on the curve. A blue arrow points from β = 3 to β = 2.4, representing the first step of gradient descent. The equation 'New β = 3 - 0.1 * 6 = 2.4' is shown next to the arrow.">
+        </div>
+        <div class="continue-button" onclick="showNextSection(4)">Continue</div>
+    </section>
+
+    <section id="section4">
+        
+        <p>The learning rate, α, is a critical hyperparameter in Gradient Descent. It determines the size of the steps we take towards the minimum. Choosing an appropriate learning rate is essential for successful optimization.</p>
+        <h3>What happens if the learning rate is too large?</h3>
+        <div class="interactive-placeholder">
+            <img src="/placeholder.svg?height=300&width=600" alt="A graph of a cost function (e.g., a parabola). A slider controls the learning rate (α). Initially, α is set to a large value (e.g., 0.9). A point on the graph represents the current parameter value. When the user clicks a 'Step' button, the point jumps across the graph, overshooting the minimum and potentially oscillating or diverging. The update rule and the current parameter values are displayed and updated with each step.">
+        </div>
+        <p>As you can see, a large learning rate can cause the algorithm to overshoot the minimum and even diverge, failing to converge to a good solution.</p>
+        <h3>What happens if the learning rate is too small?</h3>
+        <div class="interactive-placeholder">
+            <img src="/placeholder.svg?height=300&width=600" alt="Similar to the previous interactive element, but this time, the initial learning rate is set to a very small value (e.g., 0.01). When the user clicks 'Step', the point moves very slowly towards the minimum. The update rule and the current parameter values are displayed.">
+        </div>
+        <p>A very small learning rate makes the algorithm take tiny steps. While it will eventually converge, it might take a very long time, especially if the initial guess is far from the minimum.</p>
+        <div class="continue-button" onclick="showNextSection(5)">Continue</div>
+    </section>
+
+    <section id="section5">
+        
+        <p>So, how do we find the right learning rate? Unfortunately, there's no magic formula. It often involves experimentation and tuning. Common strategies include:</p>
+        <ul>
+            <li>Starting with a small value (e.g., 0.1, 0.01, or 0.001) and gradually increasing it until the algorithm fails to converge.</li>
+            <li>Using a learning rate schedule that decreases the learning rate over time. This allows for larger steps in the beginning and smaller steps as the algorithm approaches the minimum.</li>
+            <li>Employing more advanced optimization techniques (like Adam or RMSprop) that automatically adapt the learning rate based on the gradients.</li>
+        </ul>
+        <div class="why-it-matters">
+            <h3>Why It Matters</h3>
+            <p>Choosing a good learning rate is crucial for the success of gradient descent. It directly impacts the speed and stability of the optimization process.</p>
+        </div>
+        <div class="continue-button" onclick="showNextSection(6)">Continue</div>
+    </section>
+
+    <section id="section6">
+        
+        <div class="vocab-section">
+            <h3>Build Your Vocab</h3>
+            <h4 class="vocab-term">Update Rule</h4>
+            <p>The mathematical formula that specifies how to adjust the model's parameters in each iteration of gradient descent. It dictates the direction and magnitude of the parameter updates based on the gradient and the learning rate.</p>
+            <h4 class="vocab-term">Learning Rate (α)</h4>
+            <p>A hyperparameter in gradient descent that determines the step size taken in each iteration. It controls how quickly the algorithm converges (or diverges) and plays a crucial role in the optimization process.</p>
+            <h4 class="vocab-term">Hyperparameter</h4>
+            <p>A parameter that is set before the learning process begins and is not updated during training. Learning rate is a hyperparameter that needs to be tuned.</p>
+        </div>
+        <div class="continue-button" onclick="showNextSection(7)">Continue</div>
+    </section>
+
+    <section id="section7">
+        
+        <div class="stop-and-think">
+            <h3>Stop and Think</h3>
+            <h4>Imagine you're training a machine learning model using gradient descent, and you notice that the cost function is increasing instead of decreasing. What might be the cause of this problem, and how could you potentially fix it?</h4>
+
+            <button class="reveal-button" onclick="revealAnswer('stop-and-think-1')">Reveal</button>
+            <p id="stop-and-think-1" style="display: none;">One possible cause is that the learning rate is too large, causing the algorithm to overshoot the minimum and potentially diverge. To fix this, you could try reducing the learning rate. Another possibility is that the initial parameter values are poor, causing the algorithm to move in the wrong direction initially. In this case, you might try different initialization strategies or use techniques like momentum to help overcome local maxima or saddle points. Additionally, ensure that your gradient calculation is correct and that you're not accidentally ascending the gradient instead of descending it.</p>
+        </div>
+        <div class="continue-button" onclick="showNextSection(8)">Continue</div>
+    </section>
+
+    <section id="section8">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-section">
+            <h3>Frequently Asked Questions</h3>
+            <h4>Why do we subtract the gradient in the update rule instead of adding it?</h4>
+            <p>We subtract because the gradient points in the direction of the *steepest ascent*. To minimize the cost function, we want to move in the opposite direction, the direction of the *steepest descent*.</p>
+            <h4>Can we use gradient descent for any type of cost function?</h4>
+            <p>Gradient descent works best for cost functions that are differentiable (have a well-defined gradient) and are relatively smooth (without too many abrupt changes). For non-differentiable or very complex cost functions, other optimization techniques might be more suitable.</p>
+        </div>
+        <div class="continue-button" onclick="showNextSection(9)">Continue</div>
+    </section>
+
+    <section id="section9">
+        <h2>Test Your Knowledge</h2>
+        <div class="test-your-knowledge">
+            <h3>Test Your Knowledge</h3>
+            <h4>Given the cost function $$ C(\beta) = \beta^2 - 4\beta + 5 $$, an initial $$ \beta = 4 $$, and a learning rate $$ \alpha = 0.2 $$, calculate the new value of $$ \beta $$ after one iteration of gradient descent.</h4>
+            <button class="reveal-button" onclick="revealAnswer('test-your-knowledge-1')">Show Options</button>
+            <div id="test-your-knowledge-1" style="display: none;">
+                <p><input type="radio" name="q1" value="a"> 3.6</p>
+                <p><input type="radio" name="q1" value="b"> 3.2</p>
+                <p><input type="radio" name="q1" value="c"> 4.8</p>
+                <button class="check-button" onclick="checkAnswer('q1', 'b')">Check Answer</button>
+                <p id="q1-feedback" style="display: none;"></p>
+            </div>
+            <h4>What is the purpose of the learning rate in gradient descent?</h4>
+            <button class="reveal-button" onclick="revealAnswer('test-your-knowledge-2')">Show Options</button>
+            <div id="test-your-knowledge-2" style="display: none;">
+                <p><input type="radio" name="q2" value="a"> To determine the direction of the gradient.</p>
+                <p><input type="radio" name="q2" value="b"> To control the step size taken in each iteration.</p>
+                <p><input type="radio" name="q2" value="c"> To calculate the cost function.</p>
+                <button class="check-button" onclick="checkAnswer('q2', 'b')">Check Answer</button>
+                <p id="q2-feedback" style="display: none;"></p>
+            </div>
+        </div>
+        <div class="continue-button" onclick="showNextSection(10)">Continue</div>
+    </section>
+
+    <section id="section10">
+        
+        <p>Fantastic work! You've now mastered the mathematical underpinnings of Gradient Descent. In the next lesson, we'll apply this knowledge to train a linear regression model, putting the theory into practice. Get ready to see gradient descent in action!</p>
+        <div class="image-placeholder">
+            <img src="/placeholder.svg?height=300&width=600" alt="A cartoon image of a hiker (representing a data scientist) looking at a signpost pointing forward, labeled 'Next: Gradient Descent for Linear Regression'.">
+        </div>
+    </section>
+
+    <script>
+        // Show the first section initially
+        document.getElementById("section1").style.display = "block";
+        document.getElementById("section1").style.opacity = "1";
+
+        function showNextSection(nextSectionId) {
+            const currentButton = event.target;
+            const nextSection = document.getElementById("section" + nextSectionId);
+            
+            currentButton.style.display = "none";
+            
+            nextSection.style.display = "block";
+            setTimeout(() => {
+                nextSection.style.opacity = "1";
+            }, 10);
+
+            setTimeout(() => {
+                nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 500);
+        }
+
+        function revealAnswer(id) {
+            const revealText = document.getElementById(id);
+            const revealButton = event.target;
+            
+            revealText.style.display = "block";
+            revealButton.style.display = "none";
+        }
+
+        function checkAnswer(questionId, correctAnswer) {
+            const selectedAnswer = document.querySelector(`input[name="${questionId}"]:checked`);
+            const feedbackElement = document.getElementById(`${questionId}-feedback`);
+            
+            if (selectedAnswer) {
+                if (selectedAnswer.value === correctAnswer) {
+                    feedbackElement.textContent = "Correct! Well done!";
+                    feedbackElement.style.color = "green";
+                } else {
+                    feedbackElement.textContent = "Incorrect. Try again!";
+                    feedbackElement.style.color = "red";
+                }
+            } else {
+                feedbackElement.textContent = "Please select an answer.";
+                feedbackElement.style.color = "blue";
+            }
+            
+            feedbackElement.style.display = "block";
+        }
+    </script>
+</body>
+</html>
