@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Math Behind Gradient Descent</title>
+    <title>Gradient Descent for Linear Regression</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,13 +33,25 @@
         ul {
             padding-left: 20px;
         }
-        .image-placeholder, .interactive-placeholder, .continue-button, .vocab-section, .why-it-matters, .test-your-knowledge, .faq-section, .stop-and-think {
-            text-align: left;
+        .image-placeholder, .visual-aid-placeholder, .interactive-placeholder {
+            text-align: center;
+            margin-top: 20px;
         }
-        .image-placeholder img, .interactive-placeholder img {
+        .image-placeholder img, .visual-aid-placeholder img, .interactive-placeholder img {
             max-width: 100%;
             height: auto;
             border-radius: 5px;
+        }
+        .interactive-placeholder {
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            background-color: #f5f5f5;
+        }
+        .interactive-placeholder output {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
         }
         .vocab-section, .why-it-matters, .test-your-knowledge, .faq-section, .stop-and-think {
             padding: 20px;
@@ -148,164 +160,216 @@
             margin-top: 10px;
             margin-bottom: 8px;
         }
+        .visual-aid-placeholder-labels {
+            margin-top: 10px;
+        }
+        .visual-aid-placeholder-labels ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .visual-aid-placeholder-labels li {
+            margin-bottom: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
     </style>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <section id="section1">
+        <h1>Applying Our Knowledge</h1>
+        <p>Welcome back, learners! We've journeyed through the theoretical landscape of Gradient Descent. Now, it's time to put our knowledge to the test and apply it to a fundamental machine learning model: Linear Regression. Get ready to see how Gradient Descent can be used to find the best-fitting line for our data!</p>
         <div class="image-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="An illustration of a mathematical equation with the gradient descent update rule, superimposed on a graph of a cost function with an arrow showing the direction of descent.">
+            <img src="/placeholder.svg?height=300&width=600" alt="A bridge connecting a mountain representing theory to a cityscape representing real-world application, symbolizing the application of gradient descent to the practical problem of linear regression.">
         </div>
-        <h1>The Math Behind Gradient Descent</h1>
-        <p>We've explored the core idea of Gradient Descent using the intuitive analogy of a hiker descending a hill. Now, it's time to equip ourselves with the mathematical tools that power this amazing algorithm. Let's dive into the update rule and see how it translates our intuition into a concrete procedure!</p>
         <div class="continue-button" onclick="showNextSection(2)">Continue</div>
     </section>
 
     <section id="section2">
-        
-        <p>At the heart of Gradient Descent lies the update rule, which tells us how to iteratively adjust our model's parameters to move towards the minimum of the cost function. The update rule is surprisingly simple, yet incredibly powerful:</p>
-        <p>\[ \beta = \beta - \alpha\nabla_\beta C(\beta) \]</p>
-        <p>Let's break down what each part of this equation means:</p>
-        <ul>
-            <li><strong>β:</strong> This represents the vector of our model's parameters. It's what we're trying to optimize. Think of it as the hiker's current location on the cost function landscape.</li>
-            <li><strong>α (alpha):</strong> This is the <strong>learning rate</strong>, a crucial hyperparameter that controls the step size we take in each iteration. It determines how far we move along the negative gradient. It is a hyperparameter, so we have to set it before the learning process.</li>
-            <li><strong>∇βC(β):</strong> This is the <strong>gradient</strong> of the cost function C with respect to the parameters β. It's a vector that points in the direction of the steepest ascent of the cost function at the current parameter values. The negative of the gradient, -∇βC(β), points in the direction of the steepest descent.</li>
-        </ul>
-        <p>In simpler terms, the update rule says: "To update our parameters, we take the current parameter values and subtract a portion (determined by the learning rate) of the gradient."</p>
-        <div class="image-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="A diagram showing a single step of gradient descent. It starts with a point labeled 'Current β' on a cost function curve. An arrow labeled '-∇βC(β)' points downhill from this point. Another arrow, scaled down by a factor of 'α', is labeled 'α∇βC(β)'. The endpoint of this smaller arrow is labeled 'New β'. The equation 'β = β - α∇βC(β)' is shown below the diagram.">
+        <h2>Linear Regression: Finding the Best Fit</h2>
+        <p>In linear regression, our goal is to find a straight line (or a hyperplane in higher dimensions) that best represents the relationship between our input features and the target variable. Think of it as trying to draw a line through a scatter plot of data points that captures the overall trend.</p>
+        <div class="visual-aid-placeholder">
+            <p><b>Linear Regression Example</b></p>
+            <img src="/placeholder.svg?height=300&width=600" alt="A scatter plot showing data points with a line passing through them. The line represents the linear regression model. The plot visually demonstrates the concept of finding the best-fitting line that minimizes the distance to the data points.">
+            <p>Visualizing linear regression: finding the line that best fits the data.</p>
         </div>
+        <p>For example, imagine we're trying to predict house prices based on their size. We have a dataset of house sizes and their corresponding prices. Linear regression aims to find a line where the x-axis represents house size, the y-axis represents the price, and the line represents our model's prediction for the price of a house given its size.</p>
         <div class="continue-button" onclick="showNextSection(3)">Continue</div>
     </section>
 
     <section id="section3">
-        
-        <p>Let's illustrate the update rule with a simple example. Suppose we have a cost function with only one parameter, β, and our cost function is:</p>
-        <p>\[ C(\beta) = \beta^2 \]</p>
-        <p>The gradient of this cost function is:</p>
-        <p>\[ \nabla_\beta C(\beta) = 2\beta \]</p>
-        <p>Now, let's say our initial guess for β is 3, and we choose a learning rate of α = 0.1. We can apply the update rule as follows:</p>
-        <ol>
-            <li>Calculate the gradient at β = 3:
-                <p>\[ \nabla_\beta C(3) = 2 * 3 = 6 \]</p>
-            </li>
-            <li>Apply the update rule:
-                <p>\[ \text{New } \beta = 3 - 0.1 * 6 = 2.4 \]</p>
-            </li>
-        </ol>
-        <p>We've moved from β = 3 to β = 2.4, getting closer to the minimum of C(β) at β = 0. We can repeat this process, iteratively updating β until we converge to the minimum.</p>
-        <div class="image-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="A graph of the cost function C(β) = β² (a parabola). A red point is shown at β = 3 on the curve. A blue arrow points from β = 3 to β = 2.4, representing the first step of gradient descent. The equation 'New β = 3 - 0.1 * 6 = 2.4' is shown next to the arrow.">
-        </div>
+        <h2>The Cost Function: Measuring the Error</h2>
+        <p>To find the 'best' line, we need a way to measure how well a given line fits our data. This is where the cost function comes in. For linear regression, a common choice is the Mean Squared Error (MSE).</p>
+        <p>\[C(\beta) := \frac{1}{2n} * \sum_{i=1}^{n} (y^{(i)} - f_{\beta}(x^{(i)}))^2 = \frac{1}{2n} * \sum_{i=1}^{n} (y^{(i)} - \beta_0 - \beta_1x_1^{(i)} - ... - \beta_mx_m^{(i)})^2\]</p>
+        <p><b>Explanation:</b></p>
+        <ul>
+            <li>\( n \): The number of data points in our dataset.</li>
+            <li>\( y^{(i)} \): The actual value of the target variable (e.g., the actual price of the i-th house) for the i-th data point.</li>
+            <li>\( f_{\beta}(x^{(i)}) \): The predicted value of the target variable (e.g., the predicted price of the i-th house) for the i-th data point, given by our linear model with parameters β.</li>
+            <li>\( x_j^{(i)} \): The value of the j-th feature (e.g., the size of the i-th house) for the i-th data point.</li>
+            <li>\( \beta_j \): The j-th parameter of our linear model. These are the values we're trying to optimize using Gradient Descent.</li>
+        </ul>
+        <p>The MSE calculates the average squared difference between the predicted values and the actual values. The smaller the MSE, the better our line fits the data. The \(\frac{1}{2}\) term is included for mathematical convenience during differentiation and does not impact minimization.</p>
         <div class="continue-button" onclick="showNextSection(4)">Continue</div>
     </section>
 
     <section id="section4">
-        
-        <p>The learning rate, α, is a critical hyperparameter in Gradient Descent. It determines the size of the steps we take towards the minimum. Choosing an appropriate learning rate is essential for successful optimization.</p>
-        <h3>What happens if the learning rate is too large?</h3>
-        <div class="interactive-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="A graph of a cost function (e.g., a parabola). A slider controls the learning rate (α). Initially, α is set to a large value (e.g., 0.9). A point on the graph represents the current parameter value. When the user clicks a 'Step' button, the point jumps across the graph, overshooting the minimum and potentially oscillating or diverging. The update rule and the current parameter values are displayed and updated with each step.">
-        </div>
-        <p>As you can see, a large learning rate can cause the algorithm to overshoot the minimum and even diverge, failing to converge to a good solution.</p>
-        <h3>What happens if the learning rate is too small?</h3>
-        <div class="interactive-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="Similar to the previous interactive element, but this time, the initial learning rate is set to a very small value (e.g., 0.01). When the user clicks 'Step', the point moves very slowly towards the minimum. The update rule and the current parameter values are displayed.">
-        </div>
-        <p>A very small learning rate makes the algorithm take tiny steps. While it will eventually converge, it might take a very long time, especially if the initial guess is far from the minimum.</p>
+        <h2>The Gradient: Finding the Downhill Direction</h2>
+        <p>Now that we have our cost function, we need to find its gradient. This will tell us the direction of the steepest ascent, and by taking the negative, we'll know which way to move our parameters to reduce the error.</p>
+        <p>\[\frac{\partial C}{\partial \beta_j} = \frac{1}{n} * \sum_{i=1}^{n} -x_j^{(i)} * (y^{(i)} - f_{\beta}(x^{(i)})), \quad j = 0\]</p>
+        <p>\[\frac{\partial C}{\partial \beta_j} = \frac{1}{n} * \sum_{i=1}^{n} -x_j^{(i)} * (y^{(i)} - f_{\beta}(x^{(i)})), \quad j = 1, ..., m\]</p>
+        <p><b>Explanation:</b></p>
+        <ul>
+            <li>\( \frac{\partial C}{\partial \beta_j} \): This represents the partial derivative of the cost function C with respect to the parameter \( \beta_j \). It tells us how much the cost function changes if we make a small change in \( \beta_j \), while keeping all other parameters constant. For j=0 this will be the update rule for the bias/intercept.</li>
+            <li>\( \sum_{i=1}^{n} \): This is a summation symbol, meaning we sum the expression that follows over all data points from i=1 to n.</li>
+            <li>\( x_j^{(i)} \): This is the value of the j-th feature for the i-th data point.</li>
+            <li>\( (y^{(i)} - f_{\beta}(x^{(i)})) \): This is the difference between the actual value and the predicted value for the i-th data point. It represents the error for that data point.</li>
+        </ul>
+        <p>The partial derivative for each parameter \( \beta_j \) is calculated by summing the product of the feature value \( x_j^{(i)} \) and the error \( (y^{(i)} - f_{\beta}(x^{(i)})) \) over all data points, and then averaging by dividing by n. This gives us the average 'slope' of the cost function with respect to \( \beta_j \).</p>
+        <p>Don't be intimidated by the math! The key takeaway is that these formulas give us the direction we need to move each parameter (\(\beta_0, \beta_1, ..., \beta_m\)) to reduce the cost.</p>
         <div class="continue-button" onclick="showNextSection(5)">Continue</div>
     </section>
 
     <section id="section5">
-        
-        <p>So, how do we find the right learning rate? Unfortunately, there's no magic formula. It often involves experimentation and tuning. Common strategies include:</p>
+        <h2>Gradient Descent Algorithm for Linear Regression</h2>
+        <p>Let's put it all together. Here's how we apply Gradient Descent to find the optimal parameters for our linear regression model:</p>
+        <p>repeat until converge{</p>
+        <p>    \( \beta_0 = \beta_0 - \alpha * \frac{1}{n} * \sum_{i=1}^{n} (f_{\beta}(x^{(i)}) - y^{(i)}) \)</p>
+        <p>    \( \beta_j = \beta_j - \alpha * \frac{1}{n} * \sum_{i=1}^{n} x_j^{(i)} * (f_{\beta}(x^{(i)}) - y^{(i)}) \)</p>
+        <p>}</p>
+        <p><b>Explanation:</b></p>
         <ul>
-            <li>Starting with a small value (e.g., 0.1, 0.01, or 0.001) and gradually increasing it until the algorithm fails to converge.</li>
-            <li>Using a learning rate schedule that decreases the learning rate over time. This allows for larger steps in the beginning and smaller steps as the algorithm approaches the minimum.</li>
-            <li>Employing more advanced optimization techniques (like Adam or RMSprop) that automatically adapt the learning rate based on the gradients.</li>
+            <li><b>repeat until converge:</b> This indicates that we will iteratively update the parameters until a certain condition is met, such as the change in parameters becoming very small or reaching a maximum number of iterations.</li>
+            <li>\( \beta_0 \): This is the bias term in our linear model. It represents the intercept of the line.</li>
+            <li>\( \beta_j \): This represents the j-th parameter (or weight) associated with the j-th feature in our linear model. It represents the slope of the line with respect to that feature.</li>
+            <li>\( \alpha \): This is the learning rate, a positive value that determines the step size of each update.</li>
+            <li>\( \frac{1}{n} * \sum_{i=1}^{n} \): This represents the average over all n data points.</li>
+            <li>\( (f_{\beta}(x^{(i)}) - y^{(i)}) \): This is the difference between the predicted value and the actual value for the i-th data point, representing the error.</li>
+            <li>\( x_j^{(i)} \): This is the value of the j-th feature for the i-th data point.</li>
         </ul>
-        <div class="why-it-matters">
-            <h3>Why It Matters</h3>
-            <p>Choosing a good learning rate is crucial for the success of gradient descent. It directly impacts the speed and stability of the optimization process.</p>
-        </div>
+        <p>In each iteration, we update each parameter \( \beta_j \) by subtracting the learning rate times the average gradient of the cost function with respect to that parameter. This moves the parameters in the direction that reduces the cost, bringing our line closer to the best fit.</p>
+        <p>We repeat these update steps until our parameters converge, meaning they're not changing much anymore, or until we reach a maximum number of iterations.</p>
         <div class="continue-button" onclick="showNextSection(6)">Continue</div>
     </section>
 
     <section id="section6">
-        
-        <div class="vocab-section">
-            <h3>Build Your Vocab</h3>
-            <h4 class="vocab-term">Update Rule</h4>
-            <p>The mathematical formula that specifies how to adjust the model's parameters in each iteration of gradient descent. It dictates the direction and magnitude of the parameter updates based on the gradient and the learning rate.</p>
-            <h4 class="vocab-term">Learning Rate (α)</h4>
-            <p>A hyperparameter in gradient descent that determines the step size taken in each iteration. It controls how quickly the algorithm converges (or diverges) and plays a crucial role in the optimization process.</p>
-            <h4 class="vocab-term">Hyperparameter</h4>
-            <p>A parameter that is set before the learning process begins and is not updated during training. Learning rate is a hyperparameter that needs to be tuned.</p>
-        </div>
+        <h2>Example Calculation: One Iteration</h2>
+        <p>Let's do a simple example with one feature (x) and two data points to illustrate one iteration of the update for \( \beta_0 \):</p>
+        <ol>
+            <li>
+                <p>Our data points are:</p>
+                <p>\( x^{(1)} = 1, y^{(1)} = 2 \)</p>
+                <p>\( x^{(2)} = 2, y^{(2)} = 3 \)</p>
+            </li>
+            <li>
+                <p>Our model is:</p>
+                <p>\( f_{\beta}(x) = \beta_0 + \beta_1x \)</p>
+            </li>
+            <li>
+                <p>Initial parameters:</p>
+                <p>\( \beta_0 = 0, \beta_1 = 0 \)</p>
+            </li>
+            <li>
+                <p>Learning rate:</p>
+                <p>\( \alpha = 0.1 \)</p>
+            </li>
+            <li>
+                <p>Calculate predictions:</p>
+                <p>\( f_{\beta}(x^{(1)}) = 0 + 0 * 1 = 0 \)</p>
+                <p>\( f_{\beta}(x^{(2)}) = 0 + 0 * 2 = 0 \)</p>
+            </li>
+            <li>
+                <p>Calculate the gradient for \( \beta_0 \):</p>
+                <p>\( \frac{\partial C}{\partial \beta_0} = \frac{1}{2} * [(0 - 2) + (0 - 3)] = -2.5 \)</p>
+            </li>
+            <li>
+                <p>Update \( \beta_0 \):</p>
+                <p>\( \beta_0 = 0 - 0.1 * (-2.5) = 0.25 \)</p>
+            </li>
+        </ol>
+        <p>After one iteration, \( \beta_0 \) is updated from 0 to 0.25. We would then update \( \beta_1 \) similarly and continue iterating until convergence.</p>
         <div class="continue-button" onclick="showNextSection(7)">Continue</div>
     </section>
 
     <section id="section7">
-        
-        <div class="stop-and-think">
-            <h3>Stop and Think</h3>
-            <h4>Imagine you're training a machine learning model using gradient descent, and you notice that the cost function is increasing instead of decreasing. What might be the cause of this problem, and how could you potentially fix it?</h4>
-
-            <button class="reveal-button" onclick="revealAnswer('stop-and-think-1')">Reveal</button>
-            <p id="stop-and-think-1" style="display: none;">One possible cause is that the learning rate is too large, causing the algorithm to overshoot the minimum and potentially diverge. To fix this, you could try reducing the learning rate. Another possibility is that the initial parameter values are poor, causing the algorithm to move in the wrong direction initially. In this case, you might try different initialization strategies or use techniques like momentum to help overcome local maxima or saddle points. Additionally, ensure that your gradient calculation is correct and that you're not accidentally ascending the gradient instead of descending it.</p>
+        <h2>Interactive Element: Visualize the Process</h2>
+        <p>Let's see Gradient Descent for linear regression in action!</p>
+        <div class="interactive-placeholder">
+            <p><b>Linear Regression Gradient Descent</b></p>
+            <p>An interactive tool with two panels:</p>
+            <p><b>Left Panel:</b> A 2D scatter plot showing data points (x, y). A line represents the current linear regression model \(f_{\beta}(x) = \beta_0 + \beta_1x\). Sliders allow users to adjust the values of \( \beta_0 \) (intercept) and \( \beta_1 \) (slope) manually. As users change the sliders, the line updates in real-time.</p>
+            <p><b>Right Panel:</b> A 3D plot showing the cost function landscape. The x and y axes represent \( \beta_0 \) and \( \beta_1 \), and the z-axis represents the cost (MSE). A red dot indicates the current position of (\( \beta_0, \beta_1 \)) on the cost landscape. Buttons allow users to perform one iteration of Gradient Descent or run it automatically until convergence. As the algorithm runs, the red dot moves on the cost landscape, and the line in the left panel updates accordingly.</p>
+            <p><b>Controls:</b></p>
+            <ul>
+                <li>Sliders for \( \beta_0 \) and \( \beta_1 \).</li>
+                <li>Input field for learning rate (α).</li>
+                <li>Button: 'Perform One Iteration'</li>
+                <li>Button: 'Run Until Convergence'</li>
+                <li>Display: Current iteration number, current cost.</li>
+            </ul>
+            <p><b>Instructions:</b></p>
+            <ol>
+                <li>Manually adjust the line to fit the data using the sliders and observe the cost landscape.</li>
+                <li>Set a learning rate and perform iterations to see how Gradient Descent improves the fit.</li>
+                <li>Experiment with different learning rates and observe the effect on convergence.</li>
+            </ol>
         </div>
         <div class="continue-button" onclick="showNextSection(8)">Continue</div>
     </section>
 
     <section id="section8">
-        <h2>Frequently Asked Questions</h2>
-        <div class="faq-section">
-            <h3>Frequently Asked Questions</h3>
-            <h4>Why do we subtract the gradient in the update rule instead of adding it?</h4>
-            <p>We subtract because the gradient points in the direction of the *steepest ascent*. To minimize the cost function, we want to move in the opposite direction, the direction of the *steepest descent*.</p>
-            <h4>Can we use gradient descent for any type of cost function?</h4>
-            <p>Gradient descent works best for cost functions that are differentiable (have a well-defined gradient) and are relatively smooth (without too many abrupt changes). For non-differentiable or very complex cost functions, other optimization techniques might be more suitable.</p>
+        <h2>Build Your Vocabulary</h2>
+        <p>Let's reinforce some key terms:</p>
+        <div class="vocab-section">
+            <ul>
+                <li>
+                    <p><b>Mean Squared Error (MSE)</b></p>
+                    <p>A common cost function used in linear regression. It measures the average squared difference between the predicted and actual values. Lower MSE indicates a better fit.</p>
+                </li>
+                <li>
+                    <p><b>Partial Derivative</b></p>
+                    <p>The derivative of a function with respect to one variable, holding all other variables constant. In Gradient Descent, it tells us how the cost function changes with respect to a single parameter.</p>
+                </li>
+            </ul>
         </div>
         <div class="continue-button" onclick="showNextSection(9)">Continue</div>
     </section>
 
     <section id="section9">
         <h2>Test Your Knowledge</h2>
+        <p>Time for a quick quiz to test your understanding!</p>
         <div class="test-your-knowledge">
-            <h3>Test Your Knowledge</h3>
-            <h4>Given the cost function $$ C(\beta) = \beta^2 - 4\beta + 5 $$, an initial $$ \beta = 4 $$, and a learning rate $$ \alpha = 0.2 $$, calculate the new value of $$ \beta $$ after one iteration of gradient descent.</h4>
-            <button class="reveal-button" onclick="revealAnswer('test-your-knowledge-1')">Show Options</button>
-            <div id="test-your-knowledge-1" style="display: none;">
-                <p><input type="radio" name="q1" value="a"> 3.6</p>
-                <p><input type="radio" name="q1" value="b"> 3.2</p>
-                <p><input type="radio" name="q1" value="c"> 4.8</p>
-                <button class="check-button" onclick="checkAnswer('q1', 'b')">Check Answer</button>
-                <p id="q1-feedback" style="display: none;"></p>
-            </div>
-            <h4>What is the purpose of the learning rate in gradient descent?</h4>
-            <button class="reveal-button" onclick="revealAnswer('test-your-knowledge-2')">Show Options</button>
-            <div id="test-your-knowledge-2" style="display: none;">
-                <p><input type="radio" name="q2" value="a"> To determine the direction of the gradient.</p>
-                <p><input type="radio" name="q2" value="b"> To control the step size taken in each iteration.</p>
-                <p><input type="radio" name="q2" value="c"> To calculate the cost function.</p>
-                <button class="check-button" onclick="checkAnswer('q2', 'b')">Check Answer</button>
-                <p id="q2-feedback" style="display: none;"></p>
-            </div>
+            <h4>In linear regression, what does the parameter \( \beta_0 \) represent?</h4>
+            <p><input type="radio" name="q1" value="a"> The slope of the line.</p>
+            <p><input type="radio" name="q1" value="b"> The intercept of the line.</p>
+            <p><input type="radio" name="q1" value="c"> The learning rate.</p>
+            <p><input type="radio" name="q1" value="d"> The number of data points.</p>
+            <button class="check-button" onclick="checkAnswer('q1', 'b')">Check Answer</button>
+            <p id="q1-feedback" style="display: none;"></p>
         </div>
         <div class="continue-button" onclick="showNextSection(10)">Continue</div>
     </section>
 
     <section id="section10">
-        
-        <p>Fantastic work! You've now mastered the mathematical underpinnings of Gradient Descent. In the next lesson, we'll apply this knowledge to train a linear regression model, putting the theory into practice. Get ready to see gradient descent in action!</p>
+        <h2>Wrapping Up Lesson 3</h2>
+        <p>Congratulations! You've now seen how Gradient Descent can be applied to train a linear regression model. You understand how the cost function, gradient, and iterative updates work together to find the best-fitting line for your data. In the next lesson, we'll explore some of the challenges and considerations that can arise when using Gradient Descent in practice. Get ready to dive even deeper!</p>
         <div class="image-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="A cartoon image of a hiker (representing a data scientist) looking at a signpost pointing forward, labeled 'Next: Gradient Descent for Linear Regression'.">
+            <img src="/placeholder.svg?height=300&width=600" alt="A successfully fitted line on a scatter plot of data points, with arrows indicating the minimal distances between the line and the points, symbolizing the successful application of gradient descent to linear regression.">
         </div>
     </section>
 
     <script>
-        // Show the first section initially
         document.getElementById("section1").style.display = "block";
         document.getElementById("section1").style.opacity = "1";
 
@@ -339,10 +403,16 @@
             
             if (selectedAnswer) {
                 if (selectedAnswer.value === correctAnswer) {
-                    feedbackElement.textContent = "Correct! Well done!";
+                    feedbackElement.textContent = "Correct! β<sub>0</sub> represents the y-intercept, which is the point where the line crosses the y-axis when x is 0.";
                     feedbackElement.style.color = "green";
                 } else {
-                    feedbackElement.textContent = "Incorrect. Try again!";
+                    if (selectedAnswer.value === 'a') {
+                        feedbackElement.textContent = "Incorrect. The slope of the line is represented by the parameters β<sub>1</sub>, β<sub>2</sub>, ..., β<sub>m</sub>, which are associated with the features.";
+                    } else if (selectedAnswer.value === 'c') {
+                        feedbackElement.textContent = "Incorrect. The learning rate is represented by α and determines the step size in each iteration of Gradient Descent.";
+                    } else {
+                        feedbackElement.textContent = "Incorrect. The number of data points is represented by 'n' in the formulas.";
+                    }
                     feedbackElement.style.color = "red";
                 }
             } else {
