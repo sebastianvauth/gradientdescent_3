@@ -33,25 +33,13 @@
         ul {
             padding-left: 20px;
         }
-        .image-placeholder, .visual-aid-placeholder, .interactive-placeholder {
-            text-align: center;
-            margin-top: 20px;
+        .image-placeholder, .interactive-placeholder, .continue-button, .vocab-section, .why-it-matters, .test-your-knowledge, .faq-section, .stop-and-think {
+            text-align: left;
         }
-        .image-placeholder img, .visual-aid-placeholder img, .interactive-placeholder img {
+        .image-placeholder img, .interactive-placeholder img {
             max-width: 100%;
             height: auto;
             border-radius: 5px;
-        }
-        .interactive-placeholder {
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-            background-color: #f5f5f5;
-        }
-        .interactive-placeholder output {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
         }
         .vocab-section, .why-it-matters, .test-your-knowledge, .faq-section, .stop-and-think {
             padding: 20px;
@@ -160,50 +148,33 @@
             margin-top: 10px;
             margin-bottom: 8px;
         }
-        .visual-aid-placeholder-labels {
-            margin-top: 10px;
-        }
-        .visual-aid-placeholder-labels ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .visual-aid-placeholder-labels li {
-            margin-bottom: 5px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-        th {
-            background-color: #f2f2f2;
+        .math-expression {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
         }
     </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <section id="section1">
-        <h1>Applying Our Knowledge</h1>
-        <p>Welcome back, learners! We've journeyed through the theoretical landscape of Gradient Descent. Now, it's time to put our knowledge to the test and apply it to a fundamental machine learning model: Linear Regression. Get ready to see how Gradient Descent can be used to find the best-fitting line for our data!</p>
+        <h1>Gradient Descent for Linear Regression: Putting Theory into Practice</h1>
         <div class="image-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="A bridge connecting a mountain representing theory to a cityscape representing real-world application, symbolizing the application of gradient descent to the practical problem of linear regression.">
+            <img src="/placeholder.svg?height=300&width=600" alt="A bridge connecting a পাহাড় (mountain) representing theory to a cityscape representing real-world application, symbolizing the application of gradient descent to the practical problem of linear regression.">
         </div>
+        <p>Welcome back, learners! We've journeyed through the theoretical landscape of Gradient Descent. Now, it's time to put our knowledge to the test and apply it to a fundamental machine learning model: Linear Regression. Get ready to see how Gradient Descent can be used to find the best-fitting line for our data!</p>
         <div class="continue-button" onclick="showNextSection(2)">Continue</div>
     </section>
 
     <section id="section2">
         <h2>Linear Regression: Finding the Best Fit</h2>
         <p>In linear regression, our goal is to find a straight line (or a hyperplane in higher dimensions) that best represents the relationship between our input features and the target variable. Think of it as trying to draw a line through a scatter plot of data points that captures the overall trend.</p>
-        <div class="visual-aid-placeholder">
-            <p><b>Linear Regression Example</b></p>
+        <div class="image-placeholder">
             <img src="/placeholder.svg?height=300&width=600" alt="A scatter plot showing data points with a line passing through them. The line represents the linear regression model. The plot visually demonstrates the concept of finding the best-fitting line that minimizes the distance to the data points.">
-            <p>Visualizing linear regression: finding the line that best fits the data.</p>
         </div>
+        <p>Visualizing linear regression: finding the line that best fits the data.</p>
         <p>For example, imagine we're trying to predict house prices based on their size. We have a dataset of house sizes and their corresponding prices. Linear regression aims to find a line where the x-axis represents house size, the y-axis represents the price, and the line represents our model's prediction for the price of a house given its size.</p>
         <div class="continue-button" onclick="showNextSection(3)">Continue</div>
     </section>
@@ -211,94 +182,114 @@
     <section id="section3">
         <h2>The Cost Function: Measuring the Error</h2>
         <p>To find the 'best' line, we need a way to measure how well a given line fits our data. This is where the cost function comes in. For linear regression, a common choice is the Mean Squared Error (MSE).</p>
-        <p>\[C(\beta) := \frac{1}{2n} * \sum_{i=1}^{n} (y^{(i)} - f_{\beta}(x^{(i)}))^2 = \frac{1}{2n} * \sum_{i=1}^{n} (y^{(i)} - \beta_0 - \beta_1x_1^{(i)} - ... - \beta_mx_m^{(i)})^2\]</p>
-        <p><b>Explanation:</b></p>
+        <div class="math-expression">
+            \[C(\beta) := \frac{1}{2n} \sum_{i=1}^n (y^{(i)} - f_\beta(x^{(i)}))^2 = \frac{1}{2n} \sum_{i=1}^n (y^{(i)} - \beta_0 - \beta_1x_1^{(i)} - ... - \beta_mx_m^{(i)})^2\]
+        </div>
+        <p>Let's break down this formula:</p>
         <ul>
-            <li>\( n \): The number of data points in our dataset.</li>
-            <li>\( y^{(i)} \): The actual value of the target variable (e.g., the actual price of the i-th house) for the i-th data point.</li>
-            <li>\( f_{\beta}(x^{(i)}) \): The predicted value of the target variable (e.g., the predicted price of the i-th house) for the i-th data point, given by our linear model with parameters β.</li>
-            <li>\( x_j^{(i)} \): The value of the j-th feature (e.g., the size of the i-th house) for the i-th data point.</li>
-            <li>\( \beta_j \): The j-th parameter of our linear model. These are the values we're trying to optimize using Gradient Descent.</li>
+            <li><strong>n:</strong> The number of data points in our dataset.</li>
+            <li><strong>y<sup>(i)</sup>:</strong> The actual value of the target variable (e.g., the actual price of the i-th house) for the i-th data point.</li>
+            <li><strong>f<sub>β</sub>(x<sup>(i)</sup>):</strong> The predicted value of the target variable (e.g., the predicted price of the i-th house) for the i-th data point, given by our linear model with parameters β.</li>
+            <li><strong>x<sub>j</sub><sup>(i)</sup>:</strong> The value of the j-th feature (e.g., the size of the i-th house) for the i-th data point.</li>
+            <li><strong>β<sub>j</sub>:</strong> The j-th parameter of our linear model. These are the values we're trying to optimize using Gradient Descent.</li>
         </ul>
-        <p>The MSE calculates the average squared difference between the predicted values and the actual values. The smaller the MSE, the better our line fits the data. The \(\frac{1}{2}\) term is included for mathematical convenience during differentiation and does not impact minimization.</p>
+        <p>The MSE calculates the average squared difference between the predicted values and the actual values. The smaller the MSE, the better our line fits the data. The (1/2) term is included for mathematical convenience during differentiation and does not impact minimization.</p>
         <div class="continue-button" onclick="showNextSection(4)">Continue</div>
     </section>
 
     <section id="section4">
         <h2>The Gradient: Finding the Downhill Direction</h2>
         <p>Now that we have our cost function, we need to find its gradient. This will tell us the direction of the steepest ascent, and by taking the negative, we'll know which way to move our parameters to reduce the error.</p>
-        <p>\[\frac{\partial C}{\partial \beta_j} = \frac{1}{n} * \sum_{i=1}^{n} -x_j^{(i)} * (y^{(i)} - f_{\beta}(x^{(i)})), \quad j = 0\]</p>
-        <p>\[\frac{\partial C}{\partial \beta_j} = \frac{1}{n} * \sum_{i=1}^{n} -x_j^{(i)} * (y^{(i)} - f_{\beta}(x^{(i)})), \quad j = 1, ..., m\]</p>
-        <p><b>Explanation:</b></p>
+        <div class="math-expression">
+            \[\frac{\partial C}{\partial \beta_j} = \frac{1}{n} \sum_{i=1}^n -x_j^{(i)} (y^{(i)} - f_\beta(x^{(i)})), \quad j = 0\]
+            \[\frac{\partial C}{\partial \beta_j} = \frac{1}{n} \sum_{i=1}^n -x_j^{(i)} (y^{(i)} - f_\beta(x^{(i)})), \quad j = 1, ..., m\]
+        </div>
+        <p>Let's break down these formulas:</p>
         <ul>
-            <li>\( \frac{\partial C}{\partial \beta_j} \): This represents the partial derivative of the cost function C with respect to the parameter \( \beta_j \). It tells us how much the cost function changes if we make a small change in \( \beta_j \), while keeping all other parameters constant. For j=0 this will be the update rule for the bias/intercept.</li>
-            <li>\( \sum_{i=1}^{n} \): This is a summation symbol, meaning we sum the expression that follows over all data points from i=1 to n.</li>
-            <li>\( x_j^{(i)} \): This is the value of the j-th feature for the i-th data point.</li>
-            <li>\( (y^{(i)} - f_{\beta}(x^{(i)})) \): This is the difference between the actual value and the predicted value for the i-th data point. It represents the error for that data point.</li>
+            <li><strong>∂C/∂β<sub>j</sub>:</strong> This represents the partial derivative of the cost function C with respect to the parameter β<sub>j</sub>. It tells us how much the cost function changes if we make a small change in β<sub>j</sub>, while keeping all other parameters constant. For j=0 this will be the update rule for the bias/intercept.</li>
+            <li><strong>Σ<sub>i=1</sub><sup>n</sup>:</strong> This is a summation symbol, meaning we sum the expression that follows over all data points from i=1 to n.</li>
+            <li><strong>x<sub>j</sub><sup>(i)</sup>:</strong> This is the value of the j-th feature for the i-th data point.</li>
+            <li><strong>(y<sup>(i)</sup> - f<sub>β</sub>(x<sup>(i)</sup>)):</strong> This is the difference between the actual value and the predicted value for the i-th data point. It represents the error for that data point.</li>
         </ul>
-        <p>The partial derivative for each parameter \( \beta_j \) is calculated by summing the product of the feature value \( x_j^{(i)} \) and the error \( (y^{(i)} - f_{\beta}(x^{(i)})) \) over all data points, and then averaging by dividing by n. This gives us the average 'slope' of the cost function with respect to \( \beta_j \).</p>
-        <p>Don't be intimidated by the math! The key takeaway is that these formulas give us the direction we need to move each parameter (\(\beta_0, \beta_1, ..., \beta_m\)) to reduce the cost.</p>
+        <p>The partial derivative for each parameter β<sub>j</sub> is calculated by summing the product of the feature value x<sub>j</sub><sup>(i)</sup> and the error (y<sup>(i)</sup> - f<sub>β</sub>(x<sup>(i)</sup>)) over all data points, and then averaging by dividing by n. This gives us the average 'slope' of the cost function with respect to β<sub>j</sub>.</p>
+        <p>Don't be intimidated by the math! The key takeaway is that these formulas give us the direction we need to move each parameter (β<sub>0</sub>, β<sub>1</sub>, ..., β<sub>m</sub>) to reduce the cost.</p>
         <div class="continue-button" onclick="showNextSection(5)">Continue</div>
     </section>
 
     <section id="section5">
         <h2>Gradient Descent Algorithm for Linear Regression</h2>
         <p>Let's put it all together. Here's how we apply Gradient Descent to find the optimal parameters for our linear regression model:</p>
-        <p>repeat until converge{</p>
-        <p>    \( \beta_0 = \beta_0 - \alpha * \frac{1}{n} * \sum_{i=1}^{n} (f_{\beta}(x^{(i)}) - y^{(i)}) \)</p>
-        <p>    \( \beta_j = \beta_j - \alpha * \frac{1}{n} * \sum_{i=1}^{n} x_j^{(i)} * (f_{\beta}(x^{(i)}) - y^{(i)}) \)</p>
-        <p>}</p>
-        <p><b>Explanation:</b></p>
+        <div class="math-expression">
+            \[\text{repeat until converge}\{\\
+            \beta_0 = \beta_0 - \alpha \cdot \frac{1}{n} \sum_{i=1}^n (f_\beta(x^{(i)}) - y^{(i)})\\
+            \beta_j = \beta_j - \alpha \cdot \frac{1}{n} \sum_{i=1}^n x_j^{(i)} (f_\beta(x^{(i)}) - y^{(i)})\\
+            \}\]
+        </div>
+        <p>Let's break down this algorithm:</p>
         <ul>
-            <li><b>repeat until converge:</b> This indicates that we will iteratively update the parameters until a certain condition is met, such as the change in parameters becoming very small or reaching a maximum number of iterations.</li>
-            <li>\( \beta_0 \): This is the bias term in our linear model. It represents the intercept of the line.</li>
-            <li>\( \beta_j \): This represents the j-th parameter (or weight) associated with the j-th feature in our linear model. It represents the slope of the line with respect to that feature.</li>
-            <li>\( \alpha \): This is the learning rate, a positive value that determines the step size of each update.</li>
-            <li>\( \frac{1}{n} * \sum_{i=1}^{n} \): This represents the average over all n data points.</li>
-            <li>\( (f_{\beta}(x^{(i)}) - y^{(i)}) \): This is the difference between the predicted value and the actual value for the i-th data point, representing the error.</li>
-            <li>\( x_j^{(i)} \): This is the value of the j-th feature for the i-th data point.</li>
+            <li><strong>repeat until converge:</strong> This indicates that we will iteratively update the parameters until a certain condition is met, such as the change in parameters becoming very small or reaching a maximum number of iterations.</li>
+            <li><strong>β<sub>0</sub>:</strong> This is the bias term in our linear model. It represents the intercept of the line.</li>
+            <li><strong>β<sub>j</sub>:</strong> This represents the j-th parameter (or weight) associated with the j-th feature in our linear model. It represents the slope of the line with respect to that feature.</li>
+            <li><strong>α:</strong> This is the learning rate, a positive value that determines the step size of each update.</li>
+            <li><strong>(1/n) * Σ<sub>i=1</sub><sup>n</sup>:</strong> This represents the average over all n data points.</li>
+            <li><strong>(f<sub>β</sub>(x<sup>(i)</sup>) - y<sup>(i)</sup>):</strong> This is the difference between the predicted value and the actual value for the i-th data point, representing the error.</li>
+            <li><strong>x<sub>j</sub><sup>(i)</sup>:</strong> This is the value of the j-th feature for the i-th data point.</li>
         </ul>
-        <p>In each iteration, we update each parameter \( \beta_j \) by subtracting the learning rate times the average gradient of the cost function with respect to that parameter. This moves the parameters in the direction that reduces the cost, bringing our line closer to the best fit.</p>
+        <p>In each iteration, we update each parameter β<sub>j</sub> by subtracting the learning rate times the average gradient of the cost function with respect to that parameter. This moves the parameters in the direction that reduces the cost, bringing our line closer to the best fit.</p>
         <p>We repeat these update steps until our parameters converge, meaning they're not changing much anymore, or until we reach a maximum number of iterations.</p>
         <div class="continue-button" onclick="showNextSection(6)">Continue</div>
     </section>
 
     <section id="section6">
         <h2>Example Calculation: One Iteration</h2>
-        <p>Let's do a simple example with one feature (x) and two data points to illustrate one iteration of the update for \( \beta_0 \):</p>
+        <p>Let's do a simple example with one feature (x) and two data points to illustrate one iteration of the update for β<sub>0</sub>:</p>
         <ol>
             <li>
                 <p>Our data points are:</p>
-                <p>\( x^{(1)} = 1, y^{(1)} = 2 \)</p>
-                <p>\( x^{(2)} = 2, y^{(2)} = 3 \)</p>
+                <div class="math-expression">
+                    \[x^{(1)} = 1, y^{(1)} = 2\]
+                    \[x^{(2)} = 2, y^{(2)} = 3\]
+                </div>
             </li>
             <li>
                 <p>Our model is:</p>
-                <p>\( f_{\beta}(x) = \beta_0 + \beta_1x \)</p>
+                <div class="math-expression">
+                    \[f_\beta(x) = \beta_0 + \beta_1x\]
+                </div>
             </li>
             <li>
                 <p>Initial parameters:</p>
-                <p>\( \beta_0 = 0, \beta_1 = 0 \)</p>
+                <div class="math-expression">
+                    \[\beta_0 = 0, \beta_1 = 0\]
+                </div>
             </li>
             <li>
                 <p>Learning rate:</p>
-                <p>\( \alpha = 0.1 \)</p>
+                <div class="math-expression">
+                    \[\alpha = 0.1\]
+                </div>
             </li>
             <li>
                 <p>Calculate predictions:</p>
-                <p>\( f_{\beta}(x^{(1)}) = 0 + 0 * 1 = 0 \)</p>
-                <p>\( f_{\beta}(x^{(2)}) = 0 + 0 * 2 = 0 \)</p>
+                <div class="math-expression">
+                    \[f_\beta(x^{(1)}) = 0 + 0 * 1 = 0\]
+                    \[f_\beta(x^{(2)}) = 0 + 0 * 2 = 0\]
+                </div>
             </li>
             <li>
-                <p>Calculate the gradient for \( \beta_0 \):</p>
-                <p>\( \frac{\partial C}{\partial \beta_0} = \frac{1}{2} * [(0 - 2) + (0 - 3)] = -2.5 \)</p>
+                <p>Calculate the gradient for β<sub>0</sub>:</p>
+                <div class="math-expression">
+                    \[\frac{\partial C}{\partial \beta_0} = \frac{1}{2} * [(0 - 2) + (0 - 3)] = -2.5\]
+                </div>
             </li>
             <li>
-                <p>Update \( \beta_0 \):</p>
-                <p>\( \beta_0 = 0 - 0.1 * (-2.5) = 0.25 \)</p>
+                <p>Update β<sub>0</sub>:</p>
+                <div class="math-expression">
+                    \[\beta_0 = 0 - 0.1 * (-2.5) = 0.25\]
+                </div>
             </li>
         </ol>
-        <p>After one iteration, \( \beta_0 \) is updated from 0 to 0.25. We would then update \( \beta_1 \) similarly and continue iterating until convergence.</p>
+        <p>After one iteration, β<sub>0</sub> is updated from 0 to 0.25. We would then update β<sub>1</sub> similarly and continue iterating until convergence.</p>
         <div class="continue-button" onclick="showNextSection(7)">Continue</div>
     </section>
 
@@ -306,57 +297,54 @@
         <h2>Interactive Element: Visualize the Process</h2>
         <p>Let's see Gradient Descent for linear regression in action!</p>
         <div class="interactive-placeholder">
-            <p><b>Linear Regression Gradient Descent</b></p>
-            <p>An interactive tool with two panels:</p>
-            <p><b>Left Panel:</b> A 2D scatter plot showing data points (x, y). A line represents the current linear regression model \(f_{\beta}(x) = \beta_0 + \beta_1x\). Sliders allow users to adjust the values of \( \beta_0 \) (intercept) and \( \beta_1 \) (slope) manually. As users change the sliders, the line updates in real-time.</p>
-            <p><b>Right Panel:</b> A 3D plot showing the cost function landscape. The x and y axes represent \( \beta_0 \) and \( \beta_1 \), and the z-axis represents the cost (MSE). A red dot indicates the current position of (\( \beta_0, \beta_1 \)) on the cost landscape. Buttons allow users to perform one iteration of Gradient Descent or run it automatically until convergence. As the algorithm runs, the red dot moves on the cost landscape, and the line in the left panel updates accordingly.</p>
-            <p><b>Controls:</b></p>
-            <ul>
-                <li>Sliders for \( \beta_0 \) and \( \beta_1 \).</li>
-                <li>Input field for learning rate (α).</li>
-                <li>Button: 'Perform One Iteration'</li>
-                <li>Button: 'Run Until Convergence'</li>
-                <li>Display: Current iteration number, current cost.</li>
-            </ul>
-            <p><b>Instructions:</b></p>
-            <ol>
-                <li>Manually adjust the line to fit the data using the sliders and observe the cost landscape.</li>
-                <li>Set a learning rate and perform iterations to see how Gradient Descent improves the fit.</li>
-                <li>Experiment with different learning rates and observe the effect on convergence.</li>
-            </ol>
+            <img src="/placeholder.svg?height=400&width=800" alt="Interactive visualization of Gradient Descent for Linear Regression">
         </div>
+        <p>This interactive tool consists of two panels:</p>
+        <ul>
+            <li><strong>Left Panel:</strong> A 2D scatter plot showing data points (x, y). A line represents the current linear regression model f<sub>β</sub>(x) = β<sub>0</sub> + β<sub>1</sub>x. Sliders allow users to adjust the values of β<sub>0</sub> (intercept) and β<sub>1</sub> (slope) manually. As users change the sliders, the line updates in real-time.</li>
+            <li><strong>Right Panel:</strong> A 3D plot showing the cost function landscape. The x and y axes represent β<sub>0</sub> and β<sub>1</sub>, and the z-axis represents the cost (MSE). A red dot indicates the current position of (β<sub>0</sub>, β<sub>1</sub>) on the cost landscape. Buttons allow users to perform one iteration of Gradient Descent or run it automatically until convergence. As the algorithm runs, the red dot moves on the cost landscape, and the line in the left panel updates accordingly.</li>
+        </ul>
+        <p><strong>Controls:</strong></p>
+        <ul>
+            <li>Sliders for β<sub>0</sub> and β<sub>1</sub></li>
+            <li>Input field for learning rate (α)</li>
+            <li>Button: 'Perform One Iteration'</li>
+            <li>Button: 'Run Until Convergence'</li>
+            <li>Display: Current iteration number, current cost</li>
+        </ul>
+        <p><strong>Instructions:</strong></p>
+        <ol>
+            <li>Manually adjust the line to fit the data using the sliders and observe the cost landscape.</li>
+            <li>Set a learning rate and perform iterations to see how Gradient Descent improves the fit.</li>
+            <li>Experiment with different learning rates and observe the effect on convergence.</li>
+        </ol>
         <div class="continue-button" onclick="showNextSection(8)">Continue</div>
     </section>
 
     <section id="section8">
         <h2>Build Your Vocabulary</h2>
-        <p>Let's reinforce some key terms:</p>
         <div class="vocab-section">
-            <ul>
-                <li>
-                    <p><b>Mean Squared Error (MSE)</b></p>
-                    <p>A common cost function used in linear regression. It measures the average squared difference between the predicted and actual values. Lower MSE indicates a better fit.</p>
-                </li>
-                <li>
-                    <p><b>Partial Derivative</b></p>
-                    <p>The derivative of a function with respect to one variable, holding all other variables constant. In Gradient Descent, it tells us how the cost function changes with respect to a single parameter.</p>
-                </li>
-            </ul>
+            <h3>Key Terms</h3>
+            <h4 class="vocab-term">Mean Squared Error (MSE)</h4>
+            <p>A common cost function used in linear regression. It measures the average squared difference between the predicted and actual values. Lower MSE indicates a better fit.</p>
+            <h4 class="vocab-term">Partial Derivative</h4>
+            <p>The derivative of a function with respect to one variable, holding all other variables constant. In Gradient Descent, it tells us how the cost function changes with respect to a single parameter.</p>
         </div>
         <div class="continue-button" onclick="showNextSection(9)">Continue</div>
     </section>
 
     <section id="section9">
         <h2>Test Your Knowledge</h2>
-        <p>Time for a quick quiz to test your understanding!</p>
         <div class="test-your-knowledge">
-            <h4>In linear regression, what does the parameter \( \beta_0 \) represent?</h4>
-            <p><input type="radio" name="q1" value="a"> The slope of the line.</p>
-            <p><input type="radio" name="q1" value="b"> The intercept of the line.</p>
-            <p><input type="radio" name="q1" value="c"> The learning rate.</p>
-            <p><input type="radio" name="q1" value="d"> The number of data points.</p>
-            <button class="check-button" onclick="checkAnswer('q1', 'b')">Check Answer</button>
-            <p id="q1-feedback" style="display: none;"></p>
+            <h3>Quick Quiz</h3>
+            <h4>In linear regression, what does the parameter β<sub>0</sub> represent?</h4>
+            <div id="quiz-options">
+                <button class="check-button" onclick="checkAnswer(1)">The slope of the line</button>
+                <button class="check-button" onclick="checkAnswer(2)">The intercept of the line</button>
+                <button class="check-button" onclick="checkAnswer(3)">The learning rate</button>
+                <button class="check-button" onclick="checkAnswer(4)">The number of data points</button>
+            </div>
+            <p id="quiz-feedback" style="display: none;"></p>
         </div>
         <div class="continue-button" onclick="showNextSection(10)">Continue</div>
     </section>
@@ -370,6 +358,7 @@
     </section>
 
     <script>
+        // Show the first section initially
         document.getElementById("section1").style.display = "block";
         document.getElementById("section1").style.opacity = "1";
 
@@ -389,38 +378,17 @@
             }, 500);
         }
 
-        function revealAnswer(id) {
-            const revealText = document.getElementById(id);
-            const revealButton = event.target;
+        function checkAnswer(selectedOption) {
+            const feedback = document.getElementById("quiz-feedback");
+            feedback.style.display = "block";
             
-            revealText.style.display = "block";
-            revealButton.style.display = "none";
-        }
-
-        function checkAnswer(questionId, correctAnswer) {
-            const selectedAnswer = document.querySelector(`input[name="${questionId}"]:checked`);
-            const feedbackElement = document.getElementById(`${questionId}-feedback`);
-            
-            if (selectedAnswer) {
-                if (selectedAnswer.value === correctAnswer) {
-                    feedbackElement.textContent = "Correct! β<sub>0</sub> represents the y-intercept, which is the point where the line crosses the y-axis when x is 0.";
-                    feedbackElement.style.color = "green";
-                } else {
-                    if (selectedAnswer.value === 'a') {
-                        feedbackElement.textContent = "Incorrect. The slope of the line is represented by the parameters β<sub>1</sub>, β<sub>2</sub>, ..., β<sub>m</sub>, which are associated with the features.";
-                    } else if (selectedAnswer.value === 'c') {
-                        feedbackElement.textContent = "Incorrect. The learning rate is represented by α and determines the step size in each iteration of Gradient Descent.";
-                    } else {
-                        feedbackElement.textContent = "Incorrect. The number of data points is represented by 'n' in the formulas.";
-                    }
-                    feedbackElement.style.color = "red";
-                }
+            if (selectedOption === 2) {
+                feedback.innerHTML = "Correct! β<sub>0</sub> represents the y-intercept, which is the point where the line crosses the y-axis when x is 0.";
+                feedback.style.color = "green";
             } else {
-                feedbackElement.textContent = "Please select an answer.";
-                feedbackElement.style.color = "blue";
+                feedback.innerHTML = "Incorrect. Try again!";
+                feedback.style.color = "red";
             }
-            
-            feedbackElement.style.display = "block";
         }
     </script>
 </body>
