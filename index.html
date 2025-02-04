@@ -149,10 +149,9 @@
             margin-bottom: 8px;
         }
         .math-expression {
-            background-color: #f8f8f8;
-            padding: 10px;
-            border-radius: 5px;
-            overflow-x: auto;
+            font-size: 1.2em;
+            margin: 20px 0;
+            text-align: center;
         }
     </style>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
@@ -160,11 +159,12 @@
 </head>
 <body>
     <section id="section1">
-        <h1>Gradient Descent for Linear Regression: Putting Theory into Practice</h1>
-        <div class="image-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="A bridge connecting a পাহাড় (mountain) representing theory to a cityscape representing real-world application, symbolizing the application of gradient descent to the practical problem of linear regression.">
+<div class="image-placeholder">
+            <img src="/placeholder.svg?height=300&width=600" alt="A bridge connecting a mountain representing theory to a cityscape representing real-world application, symbolizing the application of gradient descent to the practical problem of linear regression.">
         </div>
-        <p>Welcome back, learners! We've journeyed through the theoretical landscape of Gradient Descent. Now, it's time to put our knowledge to the test and apply it to a fundamental machine learning model: Linear Regression. Get ready to see how Gradient Descent can be used to find the best-fitting line for our data!</p>
+        <h1>Gradient Descent for Linear Regression: Putting Theory into Practice</h1>
+        
+        <p>We've journeyed through the theoretical landscape of Gradient Descent. Now, it's time to put our knowledge to the test and apply it to a fundamental machine learning model: Linear Regression. Get ready to see how Gradient Descent can be used to find the best-fitting line for our data!</p>
         <div class="continue-button" onclick="showNextSection(2)">Continue</div>
     </section>
 
@@ -187,11 +187,11 @@
         </div>
         <p>Let's break down this formula:</p>
         <ul>
-            <li><strong>n:</strong> The number of data points in our dataset.</li>
-            <li><strong>y<sup>(i)</sup>:</strong> The actual value of the target variable (e.g., the actual price of the i-th house) for the i-th data point.</li>
-            <li><strong>f<sub>β</sub>(x<sup>(i)</sup>):</strong> The predicted value of the target variable (e.g., the predicted price of the i-th house) for the i-th data point, given by our linear model with parameters β.</li>
-            <li><strong>x<sub>j</sub><sup>(i)</sup>:</strong> The value of the j-th feature (e.g., the size of the i-th house) for the i-th data point.</li>
-            <li><strong>β<sub>j</sub>:</strong> The j-th parameter of our linear model. These are the values we're trying to optimize using Gradient Descent.</li>
+            <li>\( n \) - The number of data points in our dataset.</li>
+            <li>\( y^{(i)} \) - The actual value of the target variable (e.g., the actual price of the i-th house) for the i-th data point.</li>
+            <li>\( f_\beta(x^{(i)}) \) The predicted value of the target variable (e.g., the predicted price of the i-th house) for the i-th data point, given by our linear model with parameters β.</li>
+            <li>\( x_j^{(i)} \) - The value of the j-th feature (e.g., the size of the i-th house) for the i-th data point.</li>
+            <li>\( \beta_j \) - The j-th parameter of our linear model. These are the values we're trying to optimize using Gradient Descent.</li>
         </ul>
         <p>The MSE calculates the average squared difference between the predicted values and the actual values. The smaller the MSE, the better our line fits the data. The (1/2) term is included for mathematical convenience during differentiation and does not impact minimization.</p>
         <div class="continue-button" onclick="showNextSection(4)">Continue</div>
@@ -206,10 +206,10 @@
         </div>
         <p>Let's break down these formulas:</p>
         <ul>
-            <li><strong>∂C/∂β<sub>j</sub>:</strong> This represents the partial derivative of the cost function C with respect to the parameter β<sub>j</sub>. It tells us how much the cost function changes if we make a small change in β<sub>j</sub>, while keeping all other parameters constant. For j=0 this will be the update rule for the bias/intercept.</li>
-            <li><strong>Σ<sub>i=1</sub><sup>n</sup>:</strong> This is a summation symbol, meaning we sum the expression that follows over all data points from i=1 to n.</li>
-            <li><strong>x<sub>j</sub><sup>(i)</sup>:</strong> This is the value of the j-th feature for the i-th data point.</li>
-            <li><strong>(y<sup>(i)</sup> - f<sub>β</sub>(x<sup>(i)</sup>)):</strong> This is the difference between the actual value and the predicted value for the i-th data point. It represents the error for that data point.</li>
+            <li>\( \frac{\partial C}{\partial \beta_j} \) - This represents the partial derivative of the cost function C with respect to the parameter β<sub>j</sub>. It tells us how much the cost function changes if we make a small change in β<sub>j</sub>, while keeping all other parameters constant. For j=0 this will be the update rule for the bias/intercept.</li>
+            <li>\( \sum_{i=1}^n \) This is a summation symbol, meaning we sum the expression that follows over all data points from i=1 to n.</li>
+            <li>\( x_j^{(i)} \) This is the value of the j-th feature for the i-th data point.</li>
+            <li>\( (y^{(i)} - f_\beta(x^{(i)})) \) - This is the difference between the actual value and the predicted value for the i-th data point. It represents the error for that data point.</li>
         </ul>
         <p>The partial derivative for each parameter β<sub>j</sub> is calculated by summing the product of the feature value x<sub>j</sub><sup>(i)</sup> and the error (y<sup>(i)</sup> - f<sub>β</sub>(x<sup>(i)</sup>)) over all data points, and then averaging by dividing by n. This gives us the average 'slope' of the cost function with respect to β<sub>j</sub>.</p>
         <p>Don't be intimidated by the math! The key takeaway is that these formulas give us the direction we need to move each parameter (β<sub>0</sub>, β<sub>1</sub>, ..., β<sub>m</sub>) to reduce the cost.</p>
@@ -227,13 +227,12 @@
         </div>
         <p>Let's break down this algorithm:</p>
         <ul>
-            <li><strong>repeat until converge:</strong> This indicates that we will iteratively update the parameters until a certain condition is met, such as the change in parameters becoming very small or reaching a maximum number of iterations.</li>
-            <li><strong>β<sub>0</sub>:</strong> This is the bias term in our linear model. It represents the intercept of the line.</li>
-            <li><strong>β<sub>j</sub>:</strong> This represents the j-th parameter (or weight) associated with the j-th feature in our linear model. It represents the slope of the line with respect to that feature.</li>
-            <li><strong>α:</strong> This is the learning rate, a positive value that determines the step size of each update.</li>
-            <li><strong>(1/n) * Σ<sub>i=1</sub><sup>n</sup>:</strong> This represents the average over all n data points.</li>
-            <li><strong>(f<sub>β</sub>(x<sup>(i)</sup>) - y<sup>(i)</sup>):</strong> This is the difference between the predicted value and the actual value for the i-th data point, representing the error.</li>
-            <li><strong>x<sub>j</sub><sup>(i)</sup>:</strong> This is the value of the j-th feature for the i-th data point.</li>
+            <li>\( \beta_0 \) - This is the bias term in our linear model. It represents the intercept of the line.</li>
+            <li>\( \beta_j \) - This represents the j-th parameter (or weight) associated with the j-th feature in our linear model. It represents the slope of the line with respect to that feature.</li>
+            <li>\( \alpha \) - This is the learning rate, a positive value that determines the step size of each update.</li>
+            <li>\( \frac{1}{n} \sum_{i=1}^n \) - This represents the average over all n data points.</li>
+            <li>\( (f_\beta(x^{(i)}) - y^{(i)}) \) - This is the difference between the predicted value and the actual value for the i-th data point, representing the error.</li>
+            <li>\( x_j^{(i)} \) - This is the value of the j-th feature for the i-th data point.</li>
         </ul>
         <p>In each iteration, we update each parameter β<sub>j</sub> by subtracting the learning rate times the average gradient of the cost function with respect to that parameter. This moves the parameters in the direction that reduces the cost, bringing our line closer to the best fit.</p>
         <p>We repeat these update steps until our parameters converge, meaning they're not changing much anymore, or until we reach a maximum number of iterations.</p>
@@ -322,9 +321,8 @@
     </section>
 
     <section id="section8">
-        <h2>Build Your Vocabulary</h2>
         <div class="vocab-section">
-            <h3>Key Terms</h3>
+            <h3>Build Your Vocab</h3>
             <h4 class="vocab-term">Mean Squared Error (MSE)</h4>
             <p>A common cost function used in linear regression. It measures the average squared difference between the predicted and actual values. Lower MSE indicates a better fit.</p>
             <h4 class="vocab-term">Partial Derivative</h4>
@@ -334,7 +332,6 @@
     </section>
 
     <section id="section9">
-        <h2>Test Your Knowledge</h2>
         <div class="test-your-knowledge">
             <h3>Quick Quiz</h3>
             <h4>In linear regression, what does the parameter β<sub>0</sub> represent?</h4>
@@ -350,11 +347,9 @@
     </section>
 
     <section id="section10">
-        <h2>Wrapping Up Lesson 3</h2>
         <p>Congratulations! You've now seen how Gradient Descent can be applied to train a linear regression model. You understand how the cost function, gradient, and iterative updates work together to find the best-fitting line for your data. In the next lesson, we'll explore some of the challenges and considerations that can arise when using Gradient Descent in practice. Get ready to dive even deeper!</p>
-        <div class="image-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="A successfully fitted line on a scatter plot of data points, with arrows indicating the minimal distances between the line and the points, symbolizing the successful application of gradient descent to linear regression.">
-        </div>
+       
+            
     </section>
 
     <script>
