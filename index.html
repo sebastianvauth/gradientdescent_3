@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gradient Descent Algorithm in Detail</title>
+    <title>The Gradient Descent Algorithm & The Local Minima Problem</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,10 +33,10 @@
         ul {
             padding-left: 20px;
         }
-        .image-placeholder, .interactive-placeholder, .continue-button, .vocab-section, .why-it-matters, .test-your-knowledge, .faq-section, .stop-and-think {
+        .image-placeholder, .interactive-placeholder, .continue-button, .vocab-section, .why-it-matters, .test-your-knowledge, .faq-section, .stop-and-think, .visual-aid-placeholder {
             text-align: left;
         }
-        .image-placeholder img, .interactive-placeholder img {
+        .image-placeholder img, .interactive-placeholder img, .visual-aid-placeholder img {
             max-width: 100%;
             height: auto;
             border-radius: 5px;
@@ -104,10 +104,10 @@
             cursor: pointer;
         }
         .test-your-knowledge {
-            background-color: #e6ffe6;
+            background-color: #e6ffe6; /* Light green background */
         }
         .test-your-knowledge h3 {
-            color: #28a745;
+            color: #28a745; /* Dark green heading */
             font-size: 0.75em;
             margin-bottom: 5px;
             margin-top: 5px;
@@ -126,7 +126,7 @@
             padding: 10px 20px;
             margin-top: 15px;
             color: #ffffff;
-            background-color: #28a745;
+            background-color: #28a745; /* Green background */
             border-radius: 5px;
             text-decoration: none;
             cursor: pointer;
@@ -134,10 +134,10 @@
             font-size: 1em;
         }
         .faq-section {
-            background-color: #fffbea;
+            background-color: #fffbea; /* Light yellow background */
         }
         .faq-section h3 {
-            color: #ffcc00;
+            color: #ffcc00; /* Bright yellow heading */
             font-size: 0.75em;
             margin-bottom: 5px;
             margin-top: 5px;
@@ -148,129 +148,230 @@
             margin-top: 10px;
             margin-bottom: 8px;
         }
+        .option {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #f5f5f5;
+        }
+        .option-explanation {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .correct {
+            border-color: #28a745;
+            background-color: #d4edda;
+        }
+        .incorrect {
+            border-color: #dc3545;
+            background-color: #f8d7da;
+        }
     </style>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <section id="section1">
-        <h1>Gradient Descent Algorithm in Detail</h1>
         <div class="image-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="Image showing a detailed blueprint or schematic of an algorithm, symbolizing the detailed breakdown of the Gradient Descent process.">
+            <img src="/placeholder.svg?height=300&width=600" alt="Visual metaphor: A hiker pausing at a trail map, considering the route and destination.">
         </div>
-        <p>Welcome back, optimizer! 👋 We've learned about the core idea of Gradient Descent and how to calculate cost functions and gradients. Now, it's time to assemble all the pieces and understand the <strong>complete Gradient Descent Algorithm</strong> step-by-step. Think of this lesson as getting the detailed instructions to build and operate our 'downhill hiking machine'. Let's get algorithmic!</p>
+        <h1>Lesson 3: The Gradient Descent Algorithm & The Local Minima Problem</h1>
+        <p>We've mastered taking a <em>single step</em> of Gradient Descent, especially for linear regression. But a journey isn't just one step! We need the full algorithm: when does it start, when does it stop, and what potential pitfalls lie along the path?</p>
+        <p>Let's formalize the complete Gradient Descent process and discuss a crucial challenge: getting stuck.</p>
         <div class="continue-button" onclick="showNextSection(2)">Continue</div>
     </section>
 
     <section id="section2">
-        <h2>Algorithm Setup: Initialization</h2>
-        <p>Before we start the iterative process of Gradient Descent, we need to set up a few things. This is like preparing our hiking gear before hitting the trail.</p>
-        <p>First, we need to choose our <strong>hyperparameters</strong>. Remember, hyperparameters are settings that we set <em>before</em> training, and they control how the algorithm learns. For Gradient Descent, the key hyperparameters are:</p>
-        <ul>
-            <li><strong>Learning Rate ($$\alpha$$)</strong>: We've talked about this before! It controls the step size in each iteration. Think of it as deciding how quickly you want to descend the hill. A good learning rate is crucial – too large, and we might overshoot the minimum; too small, and it might take forever to converge.</li>
-        </ul>
-        <div class="image-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="Image depicting three scenarios of learning rates: (1) a hiker taking large, overshooting steps, (2) a hiker taking very small, slow steps, (3) a hiker taking moderately sized, efficient steps down a hill.">
+        <h2>Formalizing the Algorithm</h2>
+        <p>Think of the Gradient Descent algorithm as a structured loop. Before we even start stepping, we need to set the rules of the game – the <strong>hyperparameters</strong>.</p>
+                
+        <div class="visual-aid-placeholder">
+            <img src="/placeholder.svg?height=400&width=600" alt="Flowchart of the GD Algorithm. 1. Start Box: 'Choose Hyperparameters (α, N, ε)'. 2. Initialize Box: 'Choose initial parameters θ_start'. 3. Loop Start Diamond: 'Iteration < N AND ||∇C|| ≥ ε ?'. - Yes Path -> Box: 'Calculate Gradient ∇C(θ)'. - Box: 'Update Parameters θ := θ - α∇C(θ)'. -> Arrow back to Loop Start Diamond. - No Path -> End Box: 'Converged or Max Iterations Reached'.">
         </div>
-        <ul>
-            <li><strong>Maximum Number of Iterations (N)</strong>: We need to set a limit on how many iterations Gradient Descent will run. This prevents the algorithm from running indefinitely if it's not converging well or if we just want to limit the training time. It's like setting a time limit for our hike.</li>
-            <li><strong>Convergence Threshold ($$\epsilon$$)</strong>: This is a small positive value that determines when we consider the algorithm to have 'converged'. We stop iterating when the magnitude of the gradient becomes smaller than this threshold, indicating we're close to a minimum. It's like deciding how close to the bottom of the valley is 'close enough'.</li>
-        </ul>
-        <p>Next, we need to <strong>initialize our parameters</strong> $$\beta$$. We need a starting point for our 'hike'. Common choices for initialization are:</p>
-        <ul>
-            <li><strong>Random Initialization</strong>: We can initialize the parameters with small random values. This is often used for more complex models to break symmetry and allow different parts of the model to learn different things.</li>
-            <li><strong>Initialization to Zeros</strong>: For simpler models like linear regression, we can often just initialize all parameters to zero. This can work well, especially if the features are reasonably scaled.</li>
-        </ul>
-        <p>So, to summarize the initialization step, we set our hyperparameters ($$\alpha$$, $$N$$, $$\epsilon$$) and choose an initial value for our parameters $$\beta_{start}$$. We're now ready to start the iterative process!</p>
-        <div class="vocab-section">
-            <h3>Build Your Vocab</h3>
-            <h4 class="vocab-term">Hyperparameters</h4>
-            <p>Parameters of a learning algorithm that are set <em>before</em> training and control the learning process itself. Examples in Gradient Descent are learning rate, maximum iterations, and convergence threshold.</p>
-        </div>
-        <p>With our gear ready and starting point chosen, let's begin our descent!</p>
         <div class="continue-button" onclick="showNextSection(3)">Continue</div>
     </section>
 
     <section id="section3">
-        <h2>The Iterative Descent: Step-by-Step</h2>
-        <p>This is the heart of the Gradient Descent Algorithm! We repeat these steps until we meet a termination condition.</p>
-        <p>Inside the iteration loop, we perform the following steps:</p>
+        <p>Here are the typical steps:</p>
         <ol>
-            <li><strong>Step 1: Calculate the Gradient</strong>: We calculate the gradient of the cost function $$\nabla_{\beta}C(\beta)$$ at the current parameter values $$\beta$$. Remember from Lesson 2, this gradient tells us the direction of steepest ascent (uphill).</li>
-            <li><strong>Step 2: Update Parameters</strong>: We update the parameters by taking a step in the <em>opposite</em> direction of the gradient (downhill), scaled by the learning rate $$\alpha$$:
-                <p>\[\beta_{new} = \beta_{old} - \alpha \nabla_{\beta}C(\beta_{old})\]</p>
-            </li>
-            <li><strong>Step 3: Check for Convergence</strong>: After updating the parameters, we need to check if we should stop. We typically check two conditions:
+            <li><strong>Choose Hyperparameters:</strong> These are knobs we tune <em>before</em> starting:
                 <ul>
-                    <li><strong>Condition 1: Gradient Magnitude Check</strong>: We calculate the magnitude (or norm) of the gradient, $$||\nabla_{\beta}C(\beta)||_2$$. If this magnitude is smaller than our convergence threshold $$\epsilon$$, it means the gradient is very close to zero, and we're likely near a minimum. In this case, we stop.</li>
-                    <li><strong>Condition 2: Maximum Iterations Check</strong>: We check if we have reached the maximum number of iterations $$N$$. If we have, we stop, even if the gradient magnitude is still above the threshold. This is a safeguard against very slow convergence or non-convergence. It's our 'time limit' for the hike.</li>
+                    <li>\(\alpha\) (alpha): The <strong>Learning Rate</strong> (how big are the steps?). We already know this one!</li>
+                    <li>\(N\): Maximum <strong>Number of Iterations</strong>. A safety net – tells the algorithm to stop after N steps, even if it hasn't fully 'converged'. This prevents it from running forever.</li>
+                    <li>\(\varepsilon\) (epsilon): <strong>Convergence Threshold</strong>. A tiny positive number (e.g., 0.001, 0.00001). We use this to decide if we're 'close enough' to a minimum.</li>
+                </ul>
+            </li>
+            <li><strong>Initialize Parameters:</strong> Pick a starting point \(\theta_{start}\). (We're using the general symbol \(\theta\) for parameters now, which could be our \(\beta\) vector). Often random values or all zeros.</li>
+            <li><strong>The Loop:</strong> Repeat the following process:
+                <ul>
+                    <li><strong>a. Calculate Gradient:</strong> Compute the gradient \(\nabla_{\theta} C(\theta)\) using the <em>current</em> parameter values \(\theta\).</li>
+                    <li><strong>b. Update Parameters:</strong> Take a step downhill: \(\theta := \theta - \alpha \nabla_{\theta} C(\theta)\).</li>
+                    <li><strong>c. Check Stopping Conditions:</strong> Have we finished?</li>
                 </ul>
             </li>
         </ol>
-        <p>We repeat steps 1-3 until <em>at least one</em> of these termination conditions is met. Once we stop, the current parameter values $$\beta$$ are considered our 'learned' parameters, $$\beta_{learned}$$, which hopefully minimize the cost function (or get us very close to the minimum).</p>
-        <div class="image-placeholder">
-            <img src="/placeholder.svg?height=400&width=600" alt="Flowchart diagram of the Gradient Descent Algorithm. Start with 'Initialization (α, N, ε, β_start)'. Loop: 'Calculate Gradient ∇βC(β)', 'Update β = β - α∇βC(β)', 'Check Convergence: ||∇C(β)||₂ < ε OR Iterations >= N?'. If Yes, 'Stop & Output β_learned'. If No, loop back to 'Calculate Gradient'. Use clear arrows and boxes to represent the flow.">
-        </div>
-        <div class="vocab-section">
-            <h3>Build Your Vocab</h3>
-            <h4 class="vocab-term">Convergence</h4>
-            <p>In Gradient Descent, convergence refers to the algorithm reaching a point where the cost function stops decreasing significantly and the parameters stabilize, indicating a minimum has been found (or closely approached).</p>
-        </div>
-        <p>These iterative steps are how Gradient Descent systematically finds its way to the minimum!</p>
-        <div class="continue-button" onclick="showNextSection(4)">Continue</div>
+                <div class="continue-button" onclick="showNextSection(4)">Continue</div>
     </section>
 
     <section id="section4">
-        <h2>Putting It in Motion</h2>
-        <p>Let's visualize how Gradient Descent works with an example (conceptual, not numerical here). Imagine our cost function again as a bowl-shaped curve.</p>
-        <div class="interactive-placeholder">
-            <img src="/placeholder.svg?height=400&width=600" alt="Interactive 2D graph of a U-shaped cost function curve. Controls: Sliders to adjust Learning Rate (α), Max Iterations (N), Convergence Threshold (ε). Button: 'Run Gradient Descent'. Animation: Start from a fixed β_start. On button click, animate step-by-step Gradient Descent iterations on the curve. Show each step as an arrow moving downhill. Display the number of iterations taken and the final β_learned value achieved. Allow users to change hyperparameters and rerun to observe the effects on convergence speed and path.">
+        <div class="vocab-section">
+            <h3>Build Your Vocab</h3>
+            <h4 class="vocab-term">Hyperparameters (α, N, ε)</h4>
+            <p>Parameters set <em>before</em> the learning process begins, which control how the learning algorithm itself works (unlike model parameters like β or θ which are learned <em>during</em> the process).</p>
+            <h4 class="vocab-term">Convergence</h4>
+            <p>The state where the algorithm has reached a stable solution, typically meaning the parameters are no longer changing significantly, and the cost function is minimized (at least locally).</p>
         </div>
-        <p>Try adjusting the learning rate and see how it affects the speed and stability of the descent. What happens if you make the learning rate too large? Too small?</p>
+        
         <div class="continue-button" onclick="showNextSection(5)">Continue</div>
     </section>
 
     <section id="section5">
-        <h2>Why Both Termination Conditions?</h2>
-        <div class="stop-and-think">
-            <h3>Stop and Think</h3>
-            <h4>Why do we need <em>both</em> the gradient magnitude threshold and the maximum iterations as termination conditions? Why isn't one of them enough?</h4>
-            <button class="reveal-button" onclick="revealAnswer('stop-and-think-1')">Reveal</button>
-            <p id="stop-and-think-1" style="display: none;">The gradient magnitude threshold is ideal for convergence, but in practice, cost functions can have flat regions or very slow descent, making the gradient magnitude decrease very slowly. Without a maximum iteration limit, the algorithm might run for a very long time without significant progress. The maximum iteration limit acts as a safeguard against such situations and ensures the algorithm terminates in a reasonable time, even if perfect convergence isn't achieved.</p>
+        <h2>When Do We Stop?</h2>
+        <p>The loop continues until one of our stopping conditions is met. There are two common ones:</p>
+        
+        <ol>
+            <li><strong>Convergence (Gradient is Small):</strong> If the gradient \(\nabla C(\theta)\) becomes very close to zero, it means the 'ground' is flat. We're likely at the bottom of a valley (a minimum). Mathematically, we check if the <em>magnitude</em> (or length, technically the L2 norm) of the gradient vector is less than our tiny threshold \(\varepsilon\):
+                <p>\[ ||\nabla C(\theta)||_2 < \varepsilon \]</p>
+                <p>(Think of \(||...||_2\) as calculating the overall size of the gradient vector. If it's tiny, we stop.)</p>
+            </li>
+            <li><strong>Iteration Limit Reached:</strong> If the algorithm runs for \(N\) iterations without the gradient becoming small enough, we stop anyway. This prevents infinite loops if convergence is extremely slow or if something is wrong.</li>
+        </ol>
+        
+        <div class="image-placeholder">
+            <img src="/placeholder.svg?height=200&width=400" alt="Icon: A stopwatch indicating time limit / iteration count, and another icon representing a near-zero gradient magnitude (e.g., a flat line or very small vector).">
         </div>
+        
+        <p>Usually, we hope to stop because of condition 1 (convergence), but condition 2 (max iterations) is our safety backup.</p>
+        
         <div class="continue-button" onclick="showNextSection(6)">Continue</div>
     </section>
 
     <section id="section6">
-        <h2>Frequently Asked Questions</h2>
-        <div class="faq-section">
-            <h3>Frequently Asked Questions</h3>
-            <h4>How do I choose the 'right' learning rate, maximum iterations, and convergence threshold?</h4>
-            <p>Choosing these hyperparameters often involves experimentation and tuning. There's no one-size-fits-all answer. The 'right' values depend on the specific problem, dataset, and cost function. Techniques like cross-validation and learning rate schedules are often used to find good hyperparameter values. We'll touch upon these in later, more advanced courses!</p>
+        <h2>The Smooth Valley vs. The Bumpy Landscape</h2>
+        <p>The cost function for linear regression (MSE) is mathematically 'nice'. It's <strong>convex</strong>, meaning it looks like a single, smooth bowl.</p>
+        
+        <div class="visual-aid-placeholder">
+            <img src="/placeholder.svg?height=300&width=600" alt="Side-by-side comparison. Left: The convex curve from Lesson 1, labeled 'Convex Cost (e.g., Linear Regression MSE) - One Global Minimum'. Right: The non-convex curve from Slide 4, labeled 'Non-Convex Cost (e.g., Neural Networks) - Multiple Local Minima'.">
         </div>
+        
+        <p>For convex functions, Gradient Descent is guaranteed to find the one and only <strong>global minimum</strong> (the lowest possible point) eventually, no matter where you start (assuming a suitable learning rate).</p>
+        
+        <p><strong>BUT...</strong> many cost functions in machine learning, especially for more complex models like neural networks, are <strong>non-convex</strong>. They look like bumpy landscapes with multiple valleys and hills.</p>
+        
         <div class="continue-button" onclick="showNextSection(7)">Continue</div>
     </section>
 
     <section id="section7">
-        <h2>Test Your Knowledge</h2>
-        <div class="test-your-knowledge">
-            <h3>Test Your Knowledge</h3>
-            <h4>Which step in the Gradient Descent algorithm directly uses the learning rate ($$\alpha$$)?</h4>
-            <div id="quiz-options">
-                <p><input type="radio" name="quiz" value="0"> Calculating the Gradient $$\nabla_{\beta}C(\beta)$$</p>
-                <p><input type="radio" name="quiz" value="1"> Updating Parameters $$\beta_{new} = \beta_{old} - \alpha \nabla_{\beta}C(\beta_{old})$$</p>
-                <p><input type="radio" name="quiz" value="2"> Checking for Convergence $$||\nabla_{\beta}C(\beta)||_2 < \epsilon$$</p>
-                <p><input type="radio" name="quiz" value="3"> Initialization of Parameters $$\beta_{start}$$</p>
-            </div>
-            <button class="check-button" onclick="checkAnswer()">Check Answer</button>
-            <p id="quiz-result" style="display: none;"></p>
+        <h2>The Local Minimum Problem</h2>
+        <p>What happens when Gradient Descent runs on a non-convex landscape?</p>
+        
+        <div class="visual-aid-placeholder">
+            <img src="/placeholder.svg?height=300&width=600" alt="Use the non-convex curve from Slide 4 again. Clearly mark 'θ_start' on a slope. Show the GD path leading down into the nearest valley, marking the bottom as 'θ_learned (Local Minimum)'. Clearly mark another, deeper valley elsewhere as the 'Global Minimum'. Add text: 'GD follows local slope, gets trapped here!'">
         </div>
-        <div class="continue-button" onclick="showNextSection(8)">Continue</div>
+        
+        <p>Remember, Gradient Descent only 'feels' the slope immediately around it. It greedily takes steps downhill from its current location.</p>
+        
+        <p>If it starts on a hill that leads into a shallower valley (a <strong>local minimum</strong>), it will happily descend into that valley. Once at the bottom of the local minimum, the gradient is zero (or very close to it), satisfying the convergence condition (\(||\nabla C(\theta)||_2 < \varepsilon\)). The algorithm stops!</p>
+        
+        <p>It has no awareness that a deeper valley (the <strong>global minimum</strong>) might exist elsewhere on the landscape. It got 'stuck' in the first minimum it found.</p>
+                <div class="continue-button" onclick="showNextSection(8)">Continue</div>
     </section>
 
     <section id="section8">
-        <h2>Ready for Implementation!</h2>
-        <p>Fantastic! 🚀 You've now mastered the detailed steps of the Gradient Descent Algorithm. You understand how it's initialized, how it iteratively updates parameters using gradients and the learning rate, and how it knows when to stop. You're well-equipped to start implementing Gradient Descent yourself! In our next lessons, we'll explore variations of Gradient Descent and delve into some of its challenges and nuances. Keep up the great work!</p>
+        <div class="vocab-section">
+            <h3>Build Your Vocab</h3>
+            <h4 class="vocab-term">Convex Function</h4>
+            <p>A function shaped like a bowl, always curving upwards. It has only one minimum, which is the global minimum.</p>
+            <h4 class="vocab-term">Non-Convex Function</h4>
+            <p>A function with a more complex shape, potentially having multiple 'valleys' (local minima) and 'hills' (local maxima).</p>
+            <h4 class="vocab-term">Global Minimum</h4>
+            <p>The point where the function has the absolute lowest value across its entire domain.</p>
+            <h4 class="vocab-term">Local Minimum</h4>
+            <p>A point where the function's value is lower than at all nearby points, but possibly not the lowest overall.</p>
+        </div>
+        
+        <div class="continue-button" onclick="showNextSection(9)">Continue</div>
+    </section>
+
+    <section id="section9">
+        <h2>Visualizing Getting Stuck</h2>
+        <p>Let's see this in action. Use the interactive explorer to see how different starting points can lead to different outcomes on a bumpy landscape.</p>
+        
+        <div class="interactive-placeholder">
+            <img src="/placeholder.svg?height=400&width=600" alt="Interactive Element: Non-Convex Cost Function Explorer. Description: Display a 1D non-convex cost function with at least two distinct minima (one global, one local). Allow the user to click on several different locations on the curve to set 'θ_start'. For each start point, animate the Gradient Descent path (dots moving downhill). Show clearly how starting points on different 'hills' lead to convergence in different valleys (local minima). Highlight the global minimum location for reference.">
+        </div>
+        
+        <p>You can see how the final resting place (\(\theta_{learned}\)) completely depends on the initial guess (\(\theta_{start}\)) for non-convex functions. Gradient Descent simply doesn't have the 'global vision' to aim for the lowest valley from the start.</p>
+        
+        <div class="visual-aid-placeholder">
+            <img src="/placeholder.svg?height=300&width=400" alt="Show the meme from Slide 5 (Car taking 'local minima' exit). Caption: 'Gradient Descent choosing its path!'">
+        </div>
+                <div class="continue-button" onclick="showNextSection(10)">Continue</div>
+    </section>
+
+    <section id="section10">
+        <div class="test-your-knowledge">
+            <h3>Test Your Knowledge</h3>
+            <h4>For a non-convex cost function, is standard Gradient Descent guaranteed to find the global minimum?</h4>
+            <div class="option" onclick="checkAnswer(this, false)">
+                Yes, if the learning rate is small enough.
+                <div class="option-explanation">A small learning rate helps find <em>a</em> minimum smoothly, but doesn't guarantee it's the global one if others exist.</div>
+            </div>
+            <div class="option" onclick="checkAnswer(this, false)">
+                Yes, if you run it for enough iterations.
+                <div class="option-explanation">Running longer helps converge to the <em>local</em> minimum it's heading towards, but won't make it jump to a different, potentially deeper minimum.</div>
+            </div>
+            <div class="option" onclick="checkAnswer(this, true)">
+                No, it might converge to a local minimum depending on the starting point.
+                <div class="option-explanation">Correct! This is the key challenge with non-convex optimization.</div>
+            </div>
+            <div class="option" onclick="checkAnswer(this, false)">
+                No, it always diverges on non-convex functions.
+                <div class="option-explanation">It usually converges, just not necessarily to the global optimum. Divergence is typically caused by a learning rate that's too large.</div>
+            </div>
+        </div>
+        
+        <div class="continue-button" onclick="showNextSection(11)">Continue</div>
+    </section>
+
+    <section id="section11">
+        <h2>Is Getting Stuck Always Bad?</h2>
+        <p>So, standard Gradient Descent isn't guaranteed to find the absolute best solution for complex problems. This sounds like a major flaw!</p>
+        
+        <div class="image-placeholder">
+            <img src="/placeholder.svg?height=100&width=100" alt="Icon: A thinking face emoji 🤔.">
+        </div>
+        
+        <p>Surprisingly, in practice, especially in deep learning, getting stuck in a local minimum isn't always a disaster. Why?</p>
+        
+        <ul>
+            <li><strong>"Good Enough" Solutions:</strong> Many local minima might correspond to models that perform very well, even if they aren't theoretically perfect.</li>
+            <li><strong>Generalization:</strong> Sometimes, models found in shallower local minima might actually generalize <em>better</em> to new, unseen data than models from the absolute sharpest global minimum (which might be overly tuned to the training data - a phenomenon called overfitting).</li>
+            <li><strong>High Dimensions:</strong> In the very high-dimensional spaces where complex models live, most local minima might actually be quite close in cost value to the global minimum.</li>
+        </ul>
+                <div class="continue-button" onclick="showNextSection(12)">Continue</div>
+    </section>
+
+    <section id="section12">
+        <div class="why-it-matters">
+            <h3>Why It Matters</h3>
+            <p>Understanding that Gradient Descent finds local optima is crucial. While techniques exist to help find better minima (like different optimization algorithms or running GD multiple times from different starting points), we also accept that for many complex ML tasks, a 'good' local minimum is often sufficient and achievable.</p>
+        </div>
+                <div class="continue-button" onclick="showNextSection(13)">Continue</div>
+    </section>
+
+    <section id="section13">
+<h2>Wrapping Up</h2>
+        <p>We've now seen the full GD algorithm, its stopping criteria, and the important distinction between convex and non-convex optimization, leading to the local minima problem.</p>
+        
+        <p>In the final lesson of this block, we'll discuss GD's characteristics in practice and introduce a hugely important variation designed for speed: <strong>Stochastic Gradient Descent (SGD)</strong>.</p>
     </section>
 
     <script>
@@ -294,31 +395,23 @@
             }, 500);
         }
 
-        function revealAnswer(id) {
-            const revealText = document.getElementById(id);
-            const revealButton = event.target;
+        function checkAnswer(element, isCorrect) {
+            // Reset all options
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+                option.querySelector('.option-explanation').style.display = 'none';
+            });
             
-            revealText.style.display = "block";
-            revealButton.style.display = "none";
-        }
-
-        function checkAnswer() {
-            const selectedOption = document.querySelector('input[name="quiz"]:checked');
-            const resultElement = document.getElementById("quiz-result");
-            
-            if (selectedOption) {
-                const answer = parseInt(selectedOption.value);
-                if (answer === 1) {
-                    resultElement.textContent = "Correct! The learning rate α is multiplied by the gradient in the parameter update step to control the step size.";
-                    resultElement.style.color = "green";
-                } else {
-                    resultElement.textContent = "Incorrect. The learning rate α is used in the parameter update step: β_new = β_old - α∇_βC(β_old)";
-                    resultElement.style.color = "red";
-                }
-                resultElement.style.display = "block";
+            // Mark the selected option
+            if (isCorrect) {
+                element.classList.add('correct');
             } else {
-                alert("Please select an answer before checking.");
+                element.classList.add('incorrect');
             }
+            
+            // Show the explanation
+            element.querySelector('.option-explanation').style.display = 'block';
         }
     </script>
 </body>
